@@ -1,0 +1,119 @@
+openapi: 3.1.0
+info:
+  title: manager-API
+  description: API pour la gestion des responsable.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost.com/
+    description: Serveur de développement local
+
+paths:
+  /managers:
+    get:
+      summary: Liste tous les responsables
+      description: Renvoie une liste de tous les responsables des années de formations.
+      responses:
+        '200':
+          description: Une liste de responsable
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/manager'
+    post:
+      summary: Ajoute un nouveau responsable
+      description: Ajoute un nouveau responsable dans la table de responsable.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manager'
+      responses:
+        '201':
+          description: Responsable créé avec succès
+        '400':
+          description: Requête invalide
+
+  /managers/{id}:
+    get:
+      summary: Trouver un responsable par son id
+      description: Renvoie un responsable spécifique identifié par son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: l'id du responsable à trouver.
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Détails d'un responsable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manager'
+        '404':
+          description: responsable non trouvé
+    put:
+      summary: Met à jour un responsable
+      description: Met à jour les informations d'un responsable spécifique.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: l'id du responsable à mettre à jour.
+          schema:
+            type: long
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manager'
+      responses:
+        '200':
+          description: Le responsable a été mis à jour avec succès
+        '404':
+          description: responsable non trouvé
+        '400':
+          description: Requête invalide
+    delete:
+      summary: Supprime un responsable
+      description: Supprime un responsable spécifique de la table responsable.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: L'id du responsable à supprimer.
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Responsable supprimé avec succès
+        '404':
+          description: Responsable non trouvé
+
+components:
+  schemas:
+    manager:
+      type: object
+      required:
+        - email
+        - nom
+        - prenom
+      properties:
+        id:
+          type: long
+          description: l'identifiant d'un responsable.
+        email:
+          type: string
+          description: L'email du responsable.
+        nom:
+          type: string
+          description: nom du responsable.
+        prenom:
+          type: string
+          description: prénom du responsable.
