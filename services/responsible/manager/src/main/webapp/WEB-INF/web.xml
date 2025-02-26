@@ -52,6 +52,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ManagerServletMongo</servlet-name>
-    <url-pattern>/manager</url-pattern>
+    <url-pattern>/managers</url-pattern>
   </servlet-mapping>
 </web-app>

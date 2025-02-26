@@ -47,8 +47,7 @@ public class ManagerServletMongo extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
-		String operation = request.getParameter("operation");
-		if (operation.equals("listeManagersMongo")) {
+		
 			CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
 			CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
@@ -63,14 +62,14 @@ public class ManagerServletMongo extends HttpServlet {
 
 			getServletConfig().getServletContext().getRequestDispatcher("/afficheManagersMongo.jsp")
 				.forward(request, response);
-		}
+		
 	}
 	
 	public List<Manager> getListeManagers(){
 		List<Manager> managers = new ArrayList<>();
 		
 		for (Manager mana : this.manager.find()) {
-			System.out.println(mana.getEmail());
+			System.out.println(mana);
 			managers.add(mana);
 		}
 		
