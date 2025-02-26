@@ -70,7 +70,7 @@ public class ManagerServletMongo extends HttpServlet {
 		List<Manager> managers = new ArrayList<>();
 		
 		for (Manager mana : this.manager.find()) {
-			System.out.println(mana);
+			System.out.println(mana.getEmail());
 			managers.add(mana);
 		}
 		

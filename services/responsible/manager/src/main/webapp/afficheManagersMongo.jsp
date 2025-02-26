@@ -11,7 +11,7 @@
 <body>
 
 	<h3>Liste des managers :</h3>
-	<c:forEach items="${requestScope.manager}" var="sp">
+	<c:forEach items="${requestScope.Manager}" var="sp">
 		<h4>${sp.nom} $(sp.prenom)</h4>
 		<p>
 			<b>Email : </b>${sp.email}
