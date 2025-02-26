@@ -18,7 +18,6 @@ import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.example.mongoPojo.Manager;
-import org.example.mongoPojo.Sportif;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClient;
@@ -56,11 +55,11 @@ public class ManagerServletMongo extends HttpServlet {
 			ConnectionString connectionString = new ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
 			MongoClient mongoClient = MongoClients.create(connectionString);
 			MongoDatabase database = mongoClient.getDatabase("e22102349").withCodecRegistry(pojoCodecRegistry);
-			System.out.println("Connexion tablie\n");
+			System.out.println("Connexion établie\n");
 			
 			this.manager = database.getCollection("Manager", Manager.class);
 			
-			request.setAttribute("managers", this.getListeManagers());
+			request.setAttribute("Manager", this.getListeManagers());
 
 			getServletConfig().getServletContext().getRequestDispatcher("/afficheManagersMongo.jsp")
 				.forward(request, response);
