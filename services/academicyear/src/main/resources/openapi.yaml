@@ -114,6 +114,197 @@ paths:
         '500':
           description: Erreur serveur interne
 
+  /academicyears/{id}/students:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les étudiants d'une formation
+      description: Retourne la liste des étudiants d'une formation
+      operationId: getStudentsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des étudiants récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                  example: 1
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/groups:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les groupes d'une formation
+      description: Retourne la liste des groupes d'une formation
+      operationId: getGroupsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des groupes récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/teachingunits:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les ues d'une formation
+      description: Retourne la liste des ues d'une formation
+      operationId: getTeachingUnitsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des ues récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /acamdemicyears/{id}/register/{numEtudiant}:
+    post:
+      tags:
+        - academic-years
+      summary: Inscrit un étudiant dans une formation
+      description: Inscrit un étudiant dans une formation
+      operationId: registerStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant inscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/accept/{numEtudiant}:
+    post:
+      tags:
+        - academic-years
+      summary: Accepte un étudiant dans une formation
+      description: Accepte un étudiant dans une formation
+      operationId: acceptStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant accepté avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/reject/{numEtudiant}:
+    post:
+      tags:
+        - academic-years
+      summary: Refuse un étudiant dans une formation
+      description: Refuse un étudiant dans une formation
+      operationId: rejectStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant refusé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
   /groups/:
     get:
       tags:
@@ -305,6 +496,75 @@ paths:
           description: UE non trouvé
         '500':
           description: Erreur serveur interne
+
+  /teachingunits/{id}/register/{numEtudiant}:
+    post:
+      tags:
+        - teachingUnits
+      summary: Inscrit un étudiant dans une ue
+      description: Inscrit un étudiant dans une ue
+      operationId: registerStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant inscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/{id}/unregister/{numEtudiant}:
+    post:
+      tags:
+        - teachingUnits
+      summary: Désinscrit un étudiant dans une ue
+      description: Désinscrit un étudiant dans une ue
+      operationId: unregisterStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant désinscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
 
 components:
   schemas:
