@@ -1,0 +1,421 @@
+openapi: 3.1.0
+info:
+  title: academic-year API
+  description: |
+    API REST permettant la des formations.
+    Cette API permet de créer, lire, mettre à jour et supprimer des formations, ue et groupes.
+  version: 0.1
+  contact:
+    name: Support API
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8080
+    description: Serveur de développement local
+
+tags:
+  - name: formations
+    description: Opérations liées à la gestion des formations
+
+paths:
+  /academicyears/:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère toutes les formations
+      description: Retourne la liste complète des formations
+      operationId: getAllAcademicYears
+      responses:
+        '200':
+          description: Liste des formations récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AcademicYearDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - academic-years
+      summary: Créetion d'une nouvelle formation
+      description: Ajoute une nouvelle formation
+      operationId: createAcademicYears
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYearDto'
+      responses:
+        '201':
+          description: Formation créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère une formation par son ID
+      description: Retourne les détails d'une formation spécifique
+      operationId: getAcademicYearsById
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Formation trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - academic-years
+      summary: Supprime une formation
+      description: Supprime une formation du système par son ID
+      operationId: deleteFormation
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Formation supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /groups/:
+    get:
+      tags:
+        - groups
+      summary: Récupère tout les groupes
+      description: Retourne la liste complète des groupes
+      operationId: getAllGroups
+      responses:
+        '200':
+          description: Liste des groupes récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - groups
+      summary: Créetion d'un nouveau groupe
+      description: Ajoute d'un nouveau groupe
+      operationId: createGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupDto'
+      responses:
+        '201':
+          description: Groupe créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /groups/{id}:
+    get:
+      tags:
+        - groups
+      summary: Récupère un groupe par son ID
+      description: Retourne les détails d'un groupe spécifique
+      operationId: getGroupById
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Groupe trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - groups
+      summary: Supprime un groupes
+      description: Supprime un groupe du système par son ID
+      operationId: deleteGroup
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Groupe supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/:
+    get:
+      tags:
+        - teachingUnits
+      summary: Récupère tout les ues
+      description: Retourne la liste complète des ues
+      operationId: getAllTeachingUnits
+      responses:
+        '200':
+          description: Liste des ues récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeachingUnitDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - teachingUnits
+      summary: Créetion d'une nouvelle ue
+      description: Ajout d'une nouvelle ue
+      operationId: createTeachingUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeachingUnitDto'
+      responses:
+        '201':
+          description: UE créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/{id}:
+    get:
+      tags:
+        - teachingUnits
+      summary: Récupère une ue par son ID
+      description: Retourne les détails d'une ue spécifique
+      operationId: getTeachingUnitById
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: UE trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - teachingUnits
+      summary: Supprime une ue
+      description: Supprime une ue du système par son ID
+      operationId: deleteTeachingUnit
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: UE supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+components:
+  schemas:
+    AcademicYearDto:
+      type: object
+      description: Représentation d'une formation dans le système
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique d'une formation
+          example: 1
+        name:
+          type: string
+          description: Nom de la formation
+          example: Master 1 TIIl-A
+        praticalWorkSize:
+          type: int16
+          description: Taille max des groupes de tp
+          example: 28
+        directedWorkSize:
+          type: int16
+          description: Taille max des groupes de td
+          example: 45
+        numberOptionalTeachingUnit:
+          type: int16
+          description: Le nombre d'ue optionnel qu'un étudiant doit choisir
+        responsibleId:
+          type: integer
+          format: int64
+          example: 4
+          description: Identifiant du responsable
+        groups:
+          type: array
+          description: Liste des groupes de la formation
+          items:
+            $ref: '#/components/schemas/GroupDto'
+        teachingUnits:
+          type: array
+          description: Liste des unités d'enseignement associées
+          items:
+            $ref: '#/components/schemas/TeachingUnitDto'
+      required:
+        - name
+        - praticalWorkSize
+        - directedWorkSize
+        - numberOptionalTeachingUnit
+
+    GroupDto:
+      type: object
+      description: Représentation d'un groupe dans le système
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique d'un groupe
+          example: 1
+        name:
+          type: string
+          description: Nom du groupe
+          example: Groupe 1
+        academicYear:
+          $ref: '#/components/schemas/AcademicYearDto'
+        studentsIds:
+          type: array
+          description: Liste des identifiants des étudiants du groupe
+          items:
+            type: integer
+            format: int64
+            example: 1
+      required:
+        - name
+        - academicYear
+
+    TeachingUnitDto:
+      type: object
+      description: Représentation d'une unité d'enseignement dans le système
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique d'une unité d'enseignement
+          example: 1
+        name:
+          type: string
+          description: Nom de l'unité d'enseignement
+          example: Systèmes d'information
+        isRequired:
+          type: boolean
+          description: Indique si l'ue est obligatoire
+          example: true
+        capacity:
+          type: int16
+          description: Nombre d'étudiants maximum pour l'ue
+          example: 30
+        academicYear:
+          $ref: '#/components/schemas/AcademicYearDto'
+        responsibleId:
+          type: integer
+          format: int64
+          example: 4
+          description: Identifiant du responsable
+        studentsIds:
+          type: array
+          description: Liste des identifiants des étudiants inscrits
+          items:
+            type: integer
+            format: int64
+            example: 8
+      required:
+        - name
+        - isRequired
+        - capacity
+        - academicYear
