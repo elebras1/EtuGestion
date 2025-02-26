@@ -1,6 +1,7 @@
 package com.services.impl;
 
 import com.dtos.AcademicYearDto;
+import com.entities.AcademicYear;
 import com.mappers.AcademicYearMapper;
 import com.repositories.AcademicYearRepository;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,11 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 
     @Override
     public AcademicYearDto saveAcademicYear(AcademicYearDto academicYearDto) {
-        return null;
+        AcademicYear academicYear = this.academicYearMapper.toEntity(academicYearDto);
+        AcademicYear savedAcademicYear = this.academicYearRepository.save(academicYear);
+        return this.academicYearMapper.toDto(savedAcademicYear);
     }
+
 
     @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
