@@ -35,4 +35,9 @@ public class AcademicYearController {
         return this.academicYearService.deleteAcademicYear(id);
     }
 
+    @GetMapping("/{id}/students")
+    public List<Long> getStudentsByAcademicYear(final @PathVariable Long id){
+        return this.academicYearService.getStudentsIdByAcademicYear(id);
+    }
+
 }

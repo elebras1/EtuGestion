@@ -12,4 +12,6 @@ public interface AcademicYearService {
     boolean deleteAcademicYear(Long academicYearId);
 
     List<AcademicYearDto> getAllAcademicYears();
+
+    List<Long> getStudentsIdByAcademicYear(Long academicYearId);
 }

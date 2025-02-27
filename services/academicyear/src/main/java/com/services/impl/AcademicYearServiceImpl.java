@@ -2,6 +2,7 @@ package com.services.impl;
 
 import com.dtos.AcademicYearDto;
 import com.entities.AcademicYear;
+import com.entities.Group;
 import com.mappers.AcademicYearMapper;
 import com.repositories.AcademicYearRepository;
 import com.services.AcademicYearService;
@@ -43,5 +44,14 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public List<AcademicYearDto> getAllAcademicYears() {
         return this.academicYearRepository.findAll().stream().map(this.academicYearMapper::toDto).toList();
+    }
+
+    public List<Long> getStudentsIdByAcademicYear(Long academicYearId) {
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        if (academicYear != null) {
+            return academicYear.getGroups().stream().map(Group::getStudentsIds).flatMap(List::stream).toList();
+        }
+
+        return null;
     }
 }
