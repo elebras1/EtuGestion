@@ -123,6 +123,7 @@
 
       <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
 
+
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
         <!--
@@ -134,7 +135,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="servlet_JSP_AJAX" path="/servlet_JSP_AJAX" reloadable="true" source="org.eclipse.jst.jee.server:servlet_JSP_AJAX"/></Host>
+      <Context docBase="managers" path="" reloadable="true" source="org.eclipse.jst.jee.server:managers"/></Host>
     </Engine>
   </Service>
 </Server>
