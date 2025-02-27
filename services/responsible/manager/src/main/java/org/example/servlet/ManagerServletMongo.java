@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -31,7 +33,8 @@ import com.mongodb.client.MongoDatabase;
 public class ManagerServletMongo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	MongoCollection<Manager> manager;
+	private MongoClient mongoClient;
+	private MongoCollection<Manager> manager;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,28 +43,44 @@ public class ManagerServletMongo extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    @Override
+    public void init() {
+    	CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
+		CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
+
+		ConnectionString connectionString = new ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
+		this.mongoClient = MongoClients.create(connectionString);
+		MongoDatabase database = mongoClient.getDatabase("e22102349").withCodecRegistry(pojoCodecRegistry);
+		System.out.println("Connexion établie\n");
+		
+		this.manager = database.getCollection("Manager", Manager.class);
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-			CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
-			CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
+		List<Manager> managers = this.getListeManagers();
+		
+		response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+		
+		ObjectMapper objectMap = new ObjectMapper();
+		
+		String json = objectMap.writeValueAsString(managers);
+		
+		response.getWriter().write(json);
+		
+		/*
+		request.setAttribute("Manager", this.getListeManagers());
 
-			ConnectionString connectionString = new ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
-			MongoClient mongoClient = MongoClients.create(connectionString);
-			MongoDatabase database = mongoClient.getDatabase("e22102349").withCodecRegistry(pojoCodecRegistry);
-			System.out.println("Connexion établie\n");
-			
-			this.manager = database.getCollection("Manager", Manager.class);
-			
-			request.setAttribute("Manager", this.getListeManagers());
-
-			getServletConfig().getServletContext().getRequestDispatcher("/afficheManagersMongo.jsp")
-				.forward(request, response);
+		getServletConfig().getServletContext().getRequestDispatcher("/afficheManagersMongo.jsp")
+			.forward(request, response);
+		*/
 		
 	}
 	
@@ -75,6 +94,15 @@ public class ManagerServletMongo extends HttpServlet {
 		
 		return managers;
 	}
+	
+	@Override
+    public void destroy() {
+        if (mongoClient != null) {
+            mongoClient.close();
+            System.out.println("Connexion MongoDB fermée.");
+        }
+        super.destroy();
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
