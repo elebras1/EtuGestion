@@ -37,7 +37,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public boolean deleteAcademicYear(Long academicYearId) {
         this.academicYearRepository.deleteById(academicYearId);
-        return false;
+        return this.academicYearRepository.findById(academicYearId).isEmpty();
     }
 
     @Override
