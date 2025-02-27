@@ -13,7 +13,14 @@ public class Manager {
 	private String nom;
 	private String prenom;
 	
-	public Manager () {
+	public Manager (int id, String nom, String prenom, String email) {
+		this.id = id;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.email = email;
+	}
+	
+	public Manager() {
 		
 	}
 
