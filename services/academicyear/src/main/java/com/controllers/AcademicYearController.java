@@ -1,7 +1,7 @@
 package com.controllers;
 
 import com.dtos.AcademicYearDto;
-import com.services.impl.AcademicYearService;
+import com.services.AcademicYearService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +23,16 @@ public class AcademicYearController {
     @PostMapping
     public AcademicYearDto saveAcademicYear(final @RequestBody AcademicYearDto academicYearDto){
         return this.academicYearService.saveAcademicYear(academicYearDto);
+    }
+
+    @GetMapping("/{id}")
+    public AcademicYearDto getAcademicYear(final @PathVariable Long id){
+        return this.academicYearService.getAcademicYearById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteAcademicYear(final @PathVariable Long id){
+        return this.academicYearService.deleteAcademicYear(id);
     }
 
 }

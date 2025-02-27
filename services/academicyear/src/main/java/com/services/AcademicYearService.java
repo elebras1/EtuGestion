@@ -1,5 +1,4 @@
-package com.services.impl;
-
+package com.services;
 
 import com.dtos.AcademicYearDto;
 

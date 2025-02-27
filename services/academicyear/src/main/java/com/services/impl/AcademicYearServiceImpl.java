@@ -4,6 +4,7 @@ import com.dtos.AcademicYearDto;
 import com.entities.AcademicYear;
 import com.mappers.AcademicYearMapper;
 import com.repositories.AcademicYearRepository;
+import com.services.AcademicYearService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,15 @@ public class AcademicYearServiceImpl implements AcademicYearService {
         return this.academicYearMapper.toDto(savedAcademicYear);
     }
 
-
     @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
-        return null;
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        return this.academicYearMapper.toDto(academicYear);
     }
 
     @Override
     public boolean deleteAcademicYear(Long academicYearId) {
+        this.academicYearRepository.deleteById(academicYearId);
         return false;
     }
 

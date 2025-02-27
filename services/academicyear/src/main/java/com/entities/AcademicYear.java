@@ -18,8 +18,8 @@ public class AcademicYear {
     private Short directedWorkSize;
     private Short numberOptionalTeachingUnit;
     private Long responsibleId;
-    @OneToMany(mappedBy = "academicYear")
+    @OneToMany(mappedBy = "academicYear", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Group> groups;
-    @OneToMany(mappedBy = "academicYear")
+    @OneToMany(mappedBy = "academicYear", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeachingUnit> teachingUnits;
 }
