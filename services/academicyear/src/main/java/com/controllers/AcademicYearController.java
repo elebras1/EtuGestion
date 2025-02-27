@@ -2,9 +2,7 @@ package com.controllers;
 
 import com.dtos.AcademicYearDto;
 import com.services.impl.AcademicYearService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,11 @@ public class AcademicYearController {
     @GetMapping
     public List<AcademicYearDto> getAcademicYears() {
         return this.academicYearService.getAllAcademicYears();
+    }
+
+    @PostMapping
+    public AcademicYearDto saveAcademicYear(final @RequestBody AcademicYearDto academicYearDto){
+        return this.academicYearService.saveAcademicYear(academicYearDto);
     }
 
 }
