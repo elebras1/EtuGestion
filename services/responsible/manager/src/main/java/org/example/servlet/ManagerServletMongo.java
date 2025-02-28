@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.bson.Document;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -38,7 +39,7 @@ public class ManagerServletMongo extends HttpServlet {
 
 	private MongoClient mongoClient;
 	private MongoCollection<Manager> managerDB;
-	
+
 	private int maxId;
 
 	/**
@@ -62,7 +63,7 @@ public class ManagerServletMongo extends HttpServlet {
 		System.out.println("Connexion établie\n");
 
 		this.managerDB = database.getCollection("Manager", Manager.class);
-		
+
 		maxId = this.getMaxIdManagerMongo();
 	}
 
@@ -75,12 +76,12 @@ public class ManagerServletMongo extends HttpServlet {
 
 		return managers;
 	}
-	
+
 	public int getMaxIdManagerMongo() {
 		List<Manager> managers = this.getListeManagers();
-		
+
 		int maxId = 0, tmp = 0;
-		
+
 		for (Manager manager : managers) {
 			tmp = manager.getId();
 			if (maxId < tmp) {
@@ -133,12 +134,12 @@ public class ManagerServletMongo extends HttpServlet {
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
 		String email = request.getParameter("email");
-		
+
 		// Id incrémenté pour la création d'un nouveau responsable
 		maxId++;
-		
+
 		Manager manager = new Manager(maxId, nom, prenom, email);
-		
+
 		try {
 			if (manager.getId() <= 0 || manager.getEmail() == null || manager.getNom() == null
 					|| manager.getPrenom() == null) {
@@ -155,6 +156,63 @@ public class ManagerServletMongo extends HttpServlet {
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write("{\"description\":\"Erreur création du manager.\"}");
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String pathInfo = request.getPathInfo();
+		if (pathInfo != null && pathInfo.startsWith("/")) {
+			pathInfo = pathInfo.substring(1);
+		}
+
+		String nom = request.getParameter("nom");
+		String prenom = request.getParameter("prenom");
+		String email = request.getParameter("email");
+
+		if (pathInfo != null && !pathInfo.isEmpty()) {
+			
+			try {
+				int id = Integer.parseInt(pathInfo);
+
+				// document qui permet de stocker les données à modifier
+				Document update = new Document();
+
+				if (nom != null) {
+					update.append("nom", nom);
+				}
+				if (prenom != null) {
+					update.append("prenom", prenom);
+				}
+				if (email != null) {
+					update.append("email", email);
+				}
+
+				if (!update.isEmpty()) {
+					long modif = this.managerDB.updateOne(Filters.eq("id", id), new Document("$set", update))
+							.getModifiedCount();
+
+					if (modif > 0) {
+						response.setStatus(HttpServletResponse.SC_OK);
+						response.setContentType("application/json");
+						response.getWriter().write("{\"description\":\"Responsable mis à jour avec succès.\"}");
+					} else {
+						response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+						response.setContentType("application/json");
+						response.getWriter()
+								.write("{\"description\":\"Responsable non trouvé ou aucune modification apportée.\"}");
+					}
+				}
+			} catch (NumberFormatException e) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("application/json");
+				response.getWriter().write("{\"description\":\"L'id n'est pas valide.\"}");
+			}
 		}
 	}
 
