@@ -38,6 +38,8 @@ public class ManagerServletMongo extends HttpServlet {
 
 	private MongoClient mongoClient;
 	private MongoCollection<Manager> managerDB;
+	
+	private int maxId;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -60,17 +62,33 @@ public class ManagerServletMongo extends HttpServlet {
 		System.out.println("Connexion établie\n");
 
 		this.managerDB = database.getCollection("Manager", Manager.class);
+		
+		maxId = this.getMaxIdManagerMongo();
 	}
 
 	public List<Manager> getListeManagers() {
 		List<Manager> managers = new ArrayList<>();
 
 		for (Manager manager : this.managerDB.find()) {
-			System.out.println(manager);
 			managers.add(manager);
 		}
 
 		return managers;
+	}
+	
+	public int getMaxIdManagerMongo() {
+		List<Manager> managers = this.getListeManagers();
+		
+		int maxId = 0, tmp = 0;
+		
+		for (Manager manager : managers) {
+			tmp = manager.getId();
+			if (maxId < tmp) {
+				maxId = tmp;
+			}
+		}
+		System.out.println(maxId);
+		return maxId;
 	}
 
 	/**
@@ -112,12 +130,14 @@ public class ManagerServletMongo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		int id = Integer.parseInt(request.getParameter("id"));
 		String nom = request.getParameter("nom");
 		String prenom = request.getParameter("prenom");
 		String email = request.getParameter("email");
 		
-		Manager manager = new Manager(id, nom, prenom, email);
+		// Id incrémenté pour la création d'un nouveau responsable
+		maxId++;
+		
+		Manager manager = new Manager(maxId, nom, prenom, email);
 		
 		try {
 			if (manager.getId() <= 0 || manager.getEmail() == null || manager.getNom() == null
