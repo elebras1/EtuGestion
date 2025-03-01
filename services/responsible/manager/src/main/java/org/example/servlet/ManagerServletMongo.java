@@ -24,6 +24,7 @@ import org.bson.types.ObjectId;
 import org.example.mongoPojo.Manager;
 
 import com.mongodb.ConnectionString;
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -55,16 +56,24 @@ public class ManagerServletMongo extends HttpServlet {
 		CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
 		CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
-		// ConnectionString connectionString = new
-		// ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
-		ConnectionString connectionString = new ConnectionString("mongodb://127.0.0.1:27017");
-		this.mongoClient = MongoClients.create(connectionString);
-		MongoDatabase database = mongoClient.getDatabase("e22102349").withCodecRegistry(pojoCodecRegistry);
-		System.out.println("Connexion établie\n");
+		// ConnectionString connectionString = new ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
+		//ConnectionString connectionString = new ConnectionString("mongodb://127.0.0.1:27017");
+		ConnectionString connectionString = new ConnectionString("mongodb://mongodb:27017");
+		
+		try {
+            this.mongoClient = MongoClients.create(connectionString);
+            MongoDatabase database = mongoClient.getDatabase("e22102349").withCodecRegistry(pojoCodecRegistry);
 
-		this.managerDB = database.getCollection("Manager", Manager.class);
+            // vérifie si bien connecté à la base
+            mongoClient.getDatabase("admin").runCommand(new Document("ping", 1));
+            System.out.println("Connexion MongoDB réussie");
 
-		maxId = this.getMaxIdManagerMongo();
+            this.managerDB = database.getCollection("Manager", Manager.class);
+
+            maxId = this.getMaxIdManagerMongo();
+        } catch (MongoException e) {
+            System.out.println("Erreur de connexion à MongoDB : " + e.getMessage());
+        }
 	}
 
 	public List<Manager> getListeManagers() {
