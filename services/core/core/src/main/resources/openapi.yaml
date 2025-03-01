@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: Core API
+  description: API centrale servant de façade pour plusieurs autres API.
+  version: 0.1
+  contact:
+    name: Support API
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8080
+    description: Serveur de développement local
+
+tags:
+  - name: core
+    description: Endpoints principaux de l'API Core
+
+paths:
+  /core/data:
+    get:
+      summary: Récupère les données du Core
+      description: Retourne un objet contenant des informations sur le Core.
+      tags:
+        - core
+      responses:
+        "200":
+          description: Succès - Retourne les données du Core
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoreData"
+        "500":
+          description: Erreur serveur
+
+components:
+  schemas:
+    CoreData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Core API"
+        status:
+          type: string
+          example: "Active"
