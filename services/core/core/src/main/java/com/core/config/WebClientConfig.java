@@ -11,4 +11,11 @@ public class WebClientConfig {
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
+
+    @Bean
+    public WebClient webClient(WebClient.Builder builder) {
+        return builder.baseUrl("https://jsonplaceholder.typicode.com") // Changez par votre API
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+    }
 }
