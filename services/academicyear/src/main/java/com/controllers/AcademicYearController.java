@@ -23,7 +23,15 @@ public class AcademicYearController {
 
     @PostMapping
     public AcademicYearDto saveAcademicYear(@RequestBody AcademicYearDto academicYearDto){
+        academicYearDto.setId(null);
         return this.academicYearService.saveAcademicYear(academicYearDto);
+    }
+
+    @PutMapping("/{id}")
+    public AcademicYearDto updateAcademicYear(@PathVariable Long id, @RequestBody AcademicYearDto academicYearDto){
+        academicYearDto.setId(id);
+        System.out.println(academicYearDto);
+        return this.academicYearService.updateAcademicYear(academicYearDto);
     }
 
     @GetMapping("/{id}")

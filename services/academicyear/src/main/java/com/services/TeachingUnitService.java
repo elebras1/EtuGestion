@@ -7,6 +7,8 @@ import java.util.List;
 public interface TeachingUnitService {
     TeachingUnitDto saveTeachingUnit(TeachingUnitDto teachingUnitDto);
 
+    TeachingUnitDto updateTeachingUnit(TeachingUnitDto teachingUnitDto);
+
     TeachingUnitDto getTeachingUnitById(Long teachingUnitId);
 
     boolean deleteTeachingUnit(Long teachingUnitId);

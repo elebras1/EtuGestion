@@ -2,7 +2,6 @@ package com.services.impl;
 
 import com.dtos.TeachingUnitDto;
 import com.entities.AcademicYear;
-import com.entities.Group;
 import com.entities.TeachingUnit;
 import com.mappers.TeachingUnitMapper;
 import com.repositories.AcademicYearRepository;
@@ -32,10 +31,42 @@ public class TeachingUnitServiceImpl implements TeachingUnitService {
         AcademicYear academicYear = this.academicYearRepository.findById(teachingUnitDto.getAcademicYearId())
                 .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
         TeachingUnit teachingUnit = this.teachingUnitMapper.toEntity(teachingUnitDto);
-        teachingUnit.setId(null);
         teachingUnit.setAcademicYear(academicYear);
         teachingUnit = this.teachingUnitRepository.save(teachingUnit);
         academicYear.getTeachingUnits().add(teachingUnit);
+        return this.teachingUnitMapper.toDto(teachingUnit);
+    }
+
+    @Override
+    public TeachingUnitDto updateTeachingUnit(TeachingUnitDto teachingUnitDto) {
+        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(teachingUnitDto.getId()).orElseThrow(() ->
+                new EntityNotFoundException("Teaching Unit not found"));
+
+        if(teachingUnitDto.getName() != null) {
+            teachingUnit.setName(teachingUnitDto.getName());
+        }
+        if(teachingUnitDto.getIsRequired() != null) {
+            teachingUnit.setIsRequired(teachingUnitDto.getIsRequired());
+        }
+        if(teachingUnitDto.getCapacity() != null) {
+            teachingUnit.setCapacity(teachingUnitDto.getCapacity());
+        }
+        if(teachingUnitDto.getResponsibleId() != null) {
+            teachingUnit.setResponsibleId(teachingUnitDto.getResponsibleId());
+        }
+        if(teachingUnitDto.getAcademicYearId() != null) {
+            AcademicYear academicYear = this.academicYearRepository.findById(teachingUnitDto.getAcademicYearId())
+                    .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
+            teachingUnit.setAcademicYear(academicYear);
+        }
+        if (teachingUnitDto.getStudentsIds() != null) {
+            teachingUnit.getStudentsIds().clear();
+            for (Long studentId : teachingUnitDto.getStudentsIds()) {
+                teachingUnit.getStudentsIds().add(studentId);
+            }
+        }
+
+        teachingUnit = this.teachingUnitRepository.save(teachingUnit);
         return this.teachingUnitMapper.toDto(teachingUnit);
     }
 

@@ -22,7 +22,14 @@ public class TeachingUnitController {
 
     @PostMapping
     public TeachingUnitDto saveTeachingUnit(@RequestBody TeachingUnitDto teachingUnitDto){
+        teachingUnitDto.setId(null);
         return this.teachingUnitService.saveTeachingUnit(teachingUnitDto);
+    }
+
+    @PutMapping("/{id}")
+    public TeachingUnitDto updateTeachingUnit(@PathVariable Long id, @RequestBody TeachingUnitDto teachingUnitDto){
+        teachingUnitDto.setId(id);
+        return this.teachingUnitService.updateTeachingUnit(teachingUnitDto);
     }
 
     @GetMapping("/{id}")

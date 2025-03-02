@@ -1,6 +1,5 @@
 package com.dtos;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 @Data
 public class TeachingUnitDto {
 
-    @NotNull
     private Long id;
     private String name;
     private Boolean isRequired;

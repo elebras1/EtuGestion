@@ -35,6 +35,7 @@ public class AcademicYearMapper {
         }
 
         AcademicYear academicYear = new AcademicYear();
+        academicYear.setId(academicYearDto.getId());
         academicYear.setName(academicYearDto.getName());
         academicYear.setPraticalWorkSize(academicYearDto.getPraticalWorkSize());
         academicYear.setDirectedWorkSize(academicYearDto.getDirectedWorkSize());

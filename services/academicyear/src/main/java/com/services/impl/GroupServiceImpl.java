@@ -37,17 +37,41 @@ public class GroupServiceImpl implements GroupService {
         return this.groupMapper.toDto(group);
     }
 
-
     @Override
-    public GroupDto getGroupById(Long groupDto) {
-        Group group = this.groupRepository.findById(groupDto).orElse(null);
+    public GroupDto updateGroup(GroupDto groupDto) {
+        Group group = this.groupRepository.findById(groupDto.getId()).orElseThrow(() ->
+                new EntityNotFoundException("Group not found"));
+
+        if (groupDto.getName() != null) {
+            group.setName(groupDto.getName());
+        }
+        if (groupDto.getAcademicYearId() != null) {
+            AcademicYear academicYear = this.academicYearRepository.findById(groupDto.getAcademicYearId())
+                    .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
+            group.setAcademicYear(academicYear);
+        }
+        if(groupDto.getStudentsIds() != null) {
+            group.getStudentsIds().clear();
+            for(Long studentId : groupDto.getStudentsIds()) {
+                group.getStudentsIds().add(studentId);
+            }
+        }
+
+        group = this.groupRepository.save(group);
         return this.groupMapper.toDto(group);
     }
 
     @Override
-    public boolean deleteGroup(Long groupDto) {
-        this.groupRepository.deleteById(groupDto);
-        return this.groupRepository.findById(groupDto).isEmpty();
+    public GroupDto getGroupById(Long groupId) {
+        Group group = this.groupRepository.findById(groupId).orElseThrow(() ->
+                new EntityNotFoundException("Group not found"));
+        return this.groupMapper.toDto(group);
+    }
+
+    @Override
+    public boolean deleteGroup(Long groupId) {
+        this.groupRepository.deleteById(groupId);
+        return this.groupRepository.findById(groupId).isEmpty();
     }
 
     @Override

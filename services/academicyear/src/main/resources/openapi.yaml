@@ -87,6 +87,37 @@ paths:
           description: Formation non trouvé
         '500':
           description: Erreur serveur interne
+    put:
+      tags:
+        - academic-years
+      summary: Met à jour une formation
+      description: Met à jour une formation du système par son ID
+      operationId: updateFormation
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYearDto'
+      responses:
+        '200':
+          description: Formation mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
 
     delete:
       tags:
@@ -375,6 +406,38 @@ paths:
         '500':
           description: Erreur serveur interne
 
+    put:
+      tags:
+        - groups
+      summary: Met à jour un groupe
+      description: Met à jour un groupe du système par son ID
+      operationId: updateGroup
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupDto'
+      responses:
+        '200':
+          description: Groupe mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
     delete:
       tags:
         - groups
@@ -462,6 +525,38 @@ paths:
       responses:
         '200':
           description: UE trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    put:
+      tags:
+        - teachingUnits
+      summary: Met à jour une ue
+      description: Met à jour une ue du système par son ID
+      operationId: updateTeachingUnit
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeachingUnitDto'
+      responses:
+        '200':
+          description: UE mise à jour avec succès
           content:
             application/json:
               schema:

@@ -22,7 +22,14 @@ public class GroupController {
 
     @PostMapping
     public GroupDto saveGroup(@RequestBody GroupDto groupDto){
+        groupDto.setId(null);
         return this.groupService.saveGroup(groupDto);
+    }
+
+    @PutMapping("/{id}")
+    public GroupDto updateGroup(@PathVariable Long id, @RequestBody GroupDto groupDto){
+        groupDto.setId(id);
+        return this.groupService.updateGroup(groupDto);
     }
 
     @GetMapping("/{id}")

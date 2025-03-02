@@ -7,8 +7,8 @@ import com.entities.Group;
 import com.mappers.AcademicYearMapper;
 import com.mappers.GroupMapper;
 import com.repositories.AcademicYearRepository;
-import com.repositories.GroupRepository;
 import com.services.AcademicYearService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +36,35 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     }
 
     @Override
+    public AcademicYearDto updateAcademicYear(AcademicYearDto academicYearDto) {
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearDto.getId()).orElseThrow(() ->
+                new EntityNotFoundException("Academic year not found"));
+
+        if (academicYearDto.getName() != null) {
+            academicYear.setName(academicYearDto.getName());
+        }
+        if (academicYearDto.getPraticalWorkSize() != null) {
+            academicYear.setPraticalWorkSize(academicYearDto.getPraticalWorkSize());
+        }
+        if (academicYearDto.getDirectedWorkSize() != null) {
+            academicYear.setDirectedWorkSize(academicYearDto.getDirectedWorkSize());
+        }
+        if (academicYearDto.getNumberOptionalTeachingUnit() != null) {
+            academicYear.setNumberOptionalTeachingUnit(academicYearDto.getNumberOptionalTeachingUnit());
+        }
+        if (academicYearDto.getResponsibleId() != null) {
+            academicYear.setResponsibleId(academicYearDto.getResponsibleId());
+        }
+
+        academicYear = this.academicYearRepository.save(academicYear);
+        return this.academicYearMapper.toDto(academicYear);
+    }
+
+
+    @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
-        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElseThrow(() ->
+                new EntityNotFoundException("Academic year not found"));
         return this.academicYearMapper.toDto(academicYear);
     }
 
