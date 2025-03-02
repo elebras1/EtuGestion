@@ -1,14 +1,18 @@
 package com.services.impl;
 
 import com.dtos.AcademicYearDto;
+import com.dtos.GroupDto;
 import com.entities.AcademicYear;
 import com.entities.Group;
 import com.mappers.AcademicYearMapper;
+import com.mappers.GroupMapper;
 import com.repositories.AcademicYearRepository;
+import com.repositories.GroupRepository;
 import com.services.AcademicYearService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("academicYear")
@@ -16,10 +20,14 @@ import java.util.List;
 public class AcademicYearServiceImpl implements AcademicYearService {
     private final AcademicYearRepository academicYearRepository;
     private final AcademicYearMapper academicYearMapper;
+    private final GroupRepository groupRepository;
+    private final GroupMapper groupMapper;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupRepository groupRepository, GroupMapper groupMapper) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
+        this.groupRepository = groupRepository;
+        this.groupMapper = groupMapper;
     }
 
     @Override
@@ -53,5 +61,20 @@ public class AcademicYearServiceImpl implements AcademicYearService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<GroupDto> getGroupsByAcademicYear(Long academicYearId) {
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        if (academicYear == null) {
+            return null;
+        }
+
+        List<GroupDto> groupDtos = new ArrayList<>();
+        for (Group group : academicYear.getGroups()) {
+            groupDtos.add(this.groupMapper.toDto(group));
+        }
+
+        return groupDtos;
     }
 }

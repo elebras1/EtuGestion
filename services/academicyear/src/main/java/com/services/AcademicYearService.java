@@ -1,6 +1,7 @@
 package com.services;
 
 import com.dtos.AcademicYearDto;
+import com.dtos.GroupDto;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface AcademicYearService {
     List<AcademicYearDto> getAllAcademicYears();
 
     List<Long> getStudentsIdByAcademicYear(Long academicYearId);
+
+    List<GroupDto> getGroupsByAcademicYear(Long academicYearId);
 }
