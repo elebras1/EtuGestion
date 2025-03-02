@@ -22,22 +22,22 @@ public class AcademicYearController {
     }
 
     @PostMapping
-    public AcademicYearDto saveAcademicYear(final @RequestBody AcademicYearDto academicYearDto){
+    public AcademicYearDto saveAcademicYear(@RequestBody AcademicYearDto academicYearDto){
         return this.academicYearService.saveAcademicYear(academicYearDto);
     }
 
     @GetMapping("/{id}")
-    public AcademicYearDto getAcademicYear(final @PathVariable Long id){
+    public AcademicYearDto getAcademicYear(@PathVariable Long id){
         return this.academicYearService.getAcademicYearById(id);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteAcademicYear(final @PathVariable Long id){
+    public boolean deleteAcademicYear(@PathVariable Long id){
         return this.academicYearService.deleteAcademicYear(id);
     }
 
     @GetMapping("/{id}/students")
-    public List<Long> getStudentsByAcademicYear(final @PathVariable Long id){
+    public List<Long> getStudentsByAcademicYear(@PathVariable Long id){
         return this.academicYearService.getStudentsIdByAcademicYear(id);
     }
 

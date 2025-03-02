@@ -5,6 +5,9 @@
       MYSQL_ROOT_PASSWORD: monMotDePasseSuperSecret
       MYSQL_DATABASE: test
     volumes:
-      - /public/elebras /data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+volumes:
+  mariadb_data:

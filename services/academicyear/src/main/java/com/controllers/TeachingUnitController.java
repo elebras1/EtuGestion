@@ -21,17 +21,17 @@ public class TeachingUnitController {
     }
 
     @PostMapping
-    public TeachingUnitDto saveTeachingUnit(final @RequestBody TeachingUnitDto teachingUnitDto){
+    public TeachingUnitDto saveTeachingUnit(@RequestBody TeachingUnitDto teachingUnitDto){
         return this.teachingUnitService.saveTeachingUnit(teachingUnitDto);
     }
 
     @GetMapping("/{id}")
-    public TeachingUnitDto getTeachingUnit(final @PathVariable Long id){
+    public TeachingUnitDto getTeachingUnit(@PathVariable Long id){
         return this.teachingUnitService.getTeachingUnitById(id);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteTeachingUnit(final @PathVariable Long id){
+    public boolean deleteTeachingUnit(@PathVariable Long id){
         return this.teachingUnitService.deleteTeachingUnit(id);
     }
 }

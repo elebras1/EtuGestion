@@ -21,17 +21,17 @@ public class GroupController {
     }
 
     @PostMapping
-    public GroupDto saveGroup(final @RequestBody GroupDto groupDto){
+    public GroupDto saveGroup(@RequestBody GroupDto groupDto){
         return this.groupService.saveGroup(groupDto);
     }
 
     @GetMapping("/{id}")
-    public GroupDto getGroup(final @PathVariable Long id){
+    public GroupDto getGroup(@PathVariable Long id){
         return this.groupService.getGroupById(id);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteGroup(final @PathVariable Long id){
+    public boolean deleteGroup(@PathVariable Long id){
         return this.groupService.deleteGroup(id);
     }
 

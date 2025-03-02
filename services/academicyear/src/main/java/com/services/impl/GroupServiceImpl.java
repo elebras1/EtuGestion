@@ -30,11 +30,13 @@ public class GroupServiceImpl implements GroupService {
     public GroupDto saveGroup(GroupDto groupDto) {
         AcademicYear academicYear = this.academicYearRepository.findById(groupDto.getAcademicYearId())
                 .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
-        Group group = this.groupRepository.save(this.groupMapper.toEntity(groupDto));
+        Group group = this.groupMapper.toEntity(groupDto);
         group.setAcademicYear(academicYear);
+        group = this.groupRepository.save(group);
         academicYear.getGroups().add(group);
         return this.groupMapper.toDto(group);
     }
+
 
     @Override
     public GroupDto getGroupById(Long groupDto) {

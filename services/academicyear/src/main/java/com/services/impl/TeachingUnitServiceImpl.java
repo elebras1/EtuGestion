@@ -2,6 +2,7 @@ package com.services.impl;
 
 import com.dtos.TeachingUnitDto;
 import com.entities.AcademicYear;
+import com.entities.Group;
 import com.entities.TeachingUnit;
 import com.mappers.TeachingUnitMapper;
 import com.repositories.AcademicYearRepository;
@@ -30,22 +31,24 @@ public class TeachingUnitServiceImpl implements TeachingUnitService {
     public TeachingUnitDto saveTeachingUnit(TeachingUnitDto teachingUnitDto) {
         AcademicYear academicYear = this.academicYearRepository.findById(teachingUnitDto.getAcademicYearId())
                 .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
-        TeachingUnit teachingUnit = this.teachingUnitRepository.save(this.teachingUnitMapper.toEntity(teachingUnitDto));
+        TeachingUnit teachingUnit = this.teachingUnitMapper.toEntity(teachingUnitDto);
+        teachingUnit.setId(null);
         teachingUnit.setAcademicYear(academicYear);
+        teachingUnit = this.teachingUnitRepository.save(teachingUnit);
         academicYear.getTeachingUnits().add(teachingUnit);
         return this.teachingUnitMapper.toDto(teachingUnit);
     }
 
     @Override
-    public TeachingUnitDto getTeachingUnitById(Long teachingUnitDto) {
-        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(teachingUnitDto).orElse(null);
+    public TeachingUnitDto getTeachingUnitById(Long id) {
+        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(id).orElse(null);
         return this.teachingUnitMapper.toDto(teachingUnit);
     }
 
     @Override
-    public boolean deleteTeachingUnit(Long teachingUnitDto) {
-        this.teachingUnitRepository.deleteById(teachingUnitDto);
-        return this.teachingUnitRepository.findById(teachingUnitDto).isEmpty();
+    public boolean deleteTeachingUnit(Long id) {
+        this.teachingUnitRepository.deleteById(id);
+        return this.teachingUnitRepository.findById(id).isEmpty();
     }
 
     @Override
