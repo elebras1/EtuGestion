@@ -15,6 +15,4 @@ public class AcademicYearDto {
     private Short directedWorkSize;
     private Short numberOptionalTeachingUnit;
     private Long responsibleId;
-    private List<Long> groupsIds;
-    private List<Long> teachingUnitsIds;
 }

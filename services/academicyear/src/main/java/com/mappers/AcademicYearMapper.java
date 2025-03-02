@@ -26,22 +26,6 @@ public class AcademicYearMapper {
         academicYearDto.setNumberOptionalTeachingUnit(academicYear.getNumberOptionalTeachingUnit());
         academicYearDto.setResponsibleId(academicYear.getResponsibleId());
 
-        List<Long> groupsIds = new ArrayList<>();
-        if (academicYear.getGroups() != null) {
-            for (Group group : academicYear.getGroups()) {
-                groupsIds.add(group.getId());
-            }
-        }
-        academicYearDto.setGroupsIds(groupsIds);
-
-        List<Long> teachingUnitsIds = new ArrayList<>();
-        if (academicYear.getTeachingUnits() != null) {
-            for (TeachingUnit teachingUnit : academicYear.getTeachingUnits()) {
-                teachingUnitsIds.add(teachingUnit.getId());
-            }
-        }
-        academicYearDto.setTeachingUnitsIds(teachingUnitsIds);
-
         return academicYearDto;
     }
 
