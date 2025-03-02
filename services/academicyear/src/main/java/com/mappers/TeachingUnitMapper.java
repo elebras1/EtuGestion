@@ -22,6 +22,7 @@ public class TeachingUnitMapper {
         teachingUnitDto.setCapacity(teachingUnit.getCapacity());
         teachingUnitDto.setResponsibleId(teachingUnit.getResponsibleId());
         teachingUnitDto.setStudentsIds(teachingUnit.getStudentsIds());
+        teachingUnitDto.setAcademicYearId(teachingUnit.getAcademicYear() != null ? teachingUnit.getAcademicYear().getId() : null);
 
         return teachingUnitDto;
     }

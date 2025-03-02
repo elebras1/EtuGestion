@@ -9,8 +9,8 @@ import java.util.List;
 public class GroupDto {
 
     @NotNull
-    private Long Id;
+    private Long id;
     private String name;
-    private AcademicYearDto academicYear;
+    private Long academicYearId;
     private List<Long> studentsIds;
 }

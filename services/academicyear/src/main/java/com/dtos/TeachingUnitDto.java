@@ -9,7 +9,7 @@ import java.util.List;
 public class TeachingUnitDto {
 
     @NotNull
-    private Long Id;
+    private Long id;
     private String name;
     private Boolean isRequired;
     private Short capacity;

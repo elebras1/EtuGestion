@@ -9,12 +9,12 @@ import java.util.List;
 public class AcademicYearDto {
 
     @NotNull
-    private Long Id;
+    private Long id;
     private String name;
     private Short praticalWorkSize;
     private Short directedWorkSize;
     private Short numberOptionalTeachingUnit;
     private Long responsibleId;
-    private List<GroupDto> groups;
-    private List<TeachingUnitDto> teachingUnits;
+    private List<Long> groupsIds;
+    private List<Long> teachingUnitsIds;
 }

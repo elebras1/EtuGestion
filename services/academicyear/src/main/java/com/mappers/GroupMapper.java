@@ -19,6 +19,7 @@ public class GroupMapper {
         groupDto.setId(group.getId());
         groupDto.setName(group.getName());
         groupDto.setStudentsIds(group.getStudentsIds());
+        groupDto.setAcademicYearId(group.getAcademicYear() != null ? group.getAcademicYear().getId() : null);
 
         return groupDto;
     }

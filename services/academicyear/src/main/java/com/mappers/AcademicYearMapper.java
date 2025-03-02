@@ -2,18 +2,16 @@ package com.mappers;
 
 import com.dtos.AcademicYearDto;
 import com.entities.AcademicYear;
+import com.entities.Group;
+import com.entities.TeachingUnit;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AcademicYearMapper {
-
-    private final GroupMapper groupMapper;
-    private final TeachingUnitMapper teachingUnitMapper;
-
-    public AcademicYearMapper(GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper) {
-        this.groupMapper = groupMapper;
-        this.teachingUnitMapper = teachingUnitMapper;
-    }
 
     public AcademicYearDto toDto(AcademicYear academicYear) {
         if(academicYear == null) {
@@ -27,8 +25,22 @@ public class AcademicYearMapper {
         academicYearDto.setDirectedWorkSize(academicYear.getDirectedWorkSize());
         academicYearDto.setNumberOptionalTeachingUnit(academicYear.getNumberOptionalTeachingUnit());
         academicYearDto.setResponsibleId(academicYear.getResponsibleId());
-        academicYearDto.setGroups(groupMapper.toDto(academicYear.getGroups()));
-        academicYearDto.setTeachingUnits(teachingUnitMapper.toDto(academicYear.getTeachingUnits()));
+
+        List<Long> groupsIds = new ArrayList<>();
+        if (academicYear.getGroups() != null) {
+            for (Group group : academicYear.getGroups()) {
+                groupsIds.add(group.getId());
+            }
+        }
+        academicYearDto.setGroupsIds(groupsIds);
+
+        List<Long> teachingUnitsIds = new ArrayList<>();
+        if (academicYear.getTeachingUnits() != null) {
+            for (TeachingUnit teachingUnit : academicYear.getTeachingUnits()) {
+                teachingUnitsIds.add(teachingUnit.getId());
+            }
+        }
+        academicYearDto.setTeachingUnitsIds(teachingUnitsIds);
 
         return academicYearDto;
     }
