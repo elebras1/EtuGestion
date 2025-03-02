@@ -12,7 +12,7 @@ public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String name;
     @ManyToOne
     @JoinColumn(name = "academic_year_id")

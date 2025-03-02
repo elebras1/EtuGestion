@@ -20,13 +20,11 @@ import java.util.List;
 public class AcademicYearServiceImpl implements AcademicYearService {
     private final AcademicYearRepository academicYearRepository;
     private final AcademicYearMapper academicYearMapper;
-    private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupRepository groupRepository, GroupMapper groupMapper) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
-        this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
     }
 

@@ -597,20 +597,6 @@ components:
           format: int64
           example: 4
           description: Identifiant du responsable
-        groupsIds:
-          type: array
-          description: Liste des identifiants des groupes de la formation
-          items:
-            type: integer
-            format: int64
-            example: 1
-        teachingUnitsIds:
-          type: array
-          description: Liste des identifiants des unités d'enseignement associées
-          items:
-            type: integer
-            format: int64
-            example: 2
       required:
         - name
         - praticalWorkSize

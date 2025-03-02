@@ -1,10 +1,13 @@
 package com.services.impl;
 
 import com.dtos.TeachingUnitDto;
+import com.entities.AcademicYear;
 import com.entities.TeachingUnit;
 import com.mappers.TeachingUnitMapper;
+import com.repositories.AcademicYearRepository;
 import com.repositories.TeachingUnitRepository;
 import com.services.TeachingUnitService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,29 +18,34 @@ import java.util.List;
 public class TeachingUnitServiceImpl implements TeachingUnitService {
     private final TeachingUnitRepository teachingUnitRepository;
     private final TeachingUnitMapper teachingUnitMapper;
+    private final AcademicYearRepository academicYearRepository;
 
-    public TeachingUnitServiceImpl(TeachingUnitRepository teachingUnitRepository, TeachingUnitMapper teachingUnitMapper) {
+    public TeachingUnitServiceImpl(TeachingUnitRepository teachingUnitRepository, TeachingUnitMapper teachingUnitMapper, AcademicYearRepository academicYearRepository) {
         this.teachingUnitRepository = teachingUnitRepository;
         this.teachingUnitMapper = teachingUnitMapper;
+        this.academicYearRepository = academicYearRepository;
     }
 
     @Override
     public TeachingUnitDto saveTeachingUnit(TeachingUnitDto teachingUnitDto) {
-        TeachingUnit teachingUnit = this.teachingUnitMapper.toEntity(teachingUnitDto);
-        TeachingUnit savedTeachingUnit = this.teachingUnitRepository.save(teachingUnit);
-        return this.teachingUnitMapper.toDto(savedTeachingUnit);
-    }
-
-    @Override
-    public TeachingUnitDto getTeachingUnitById(Long TeachingUnitId) {
-        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(TeachingUnitId).orElse(null);
+        AcademicYear academicYear = this.academicYearRepository.findById(teachingUnitDto.getAcademicYearId())
+                .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
+        TeachingUnit teachingUnit = this.teachingUnitRepository.save(this.teachingUnitMapper.toEntity(teachingUnitDto));
+        teachingUnit.setAcademicYear(academicYear);
+        academicYear.getTeachingUnits().add(teachingUnit);
         return this.teachingUnitMapper.toDto(teachingUnit);
     }
 
     @Override
-    public boolean deleteTeachingUnit(Long TeachingUnitId) {
-        this.teachingUnitRepository.deleteById(TeachingUnitId);
-        return this.teachingUnitRepository.findById(TeachingUnitId).isEmpty();
+    public TeachingUnitDto getTeachingUnitById(Long teachingUnitDto) {
+        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(teachingUnitDto).orElse(null);
+        return this.teachingUnitMapper.toDto(teachingUnit);
+    }
+
+    @Override
+    public boolean deleteTeachingUnit(Long teachingUnitDto) {
+        this.teachingUnitRepository.deleteById(teachingUnitDto);
+        return this.teachingUnitRepository.findById(teachingUnitDto).isEmpty();
     }
 
     @Override

@@ -7,9 +7,9 @@ import java.util.List;
 public interface TeachingUnitService {
     TeachingUnitDto saveTeachingUnit(TeachingUnitDto teachingUnitDto);
 
-    TeachingUnitDto getTeachingUnitById(Long TeachingUnitId);
+    TeachingUnitDto getTeachingUnitById(Long teachingUnitId);
 
-    boolean deleteTeachingUnit(Long TeachingUnitId);
+    boolean deleteTeachingUnit(Long teachingUnitId);
 
     List<TeachingUnitDto> getAllTeachingUnits();
 }

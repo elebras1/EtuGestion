@@ -5,11 +5,11 @@ import com.dtos.GroupDto;
 import java.util.List;
 
 public interface GroupService {
-    GroupDto saveGroup(GroupDto GroupDto);
+    GroupDto saveGroup(GroupDto groupDto);
 
-    GroupDto getGroupById(Long GroupId);
+    GroupDto getGroupById(Long groupId);
 
-    boolean deleteGroup(Long GroupId);
+    boolean deleteGroup(Long groupId);
 
     List<GroupDto> getAllGroups();
 }
