@@ -1,7 +1,7 @@
 # utilise l'image officielle de tomcat
 FROM tomcat:10.0-jdk17
 
-# supprime l'application par défaut
+# supprime l'application par défautls
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
 # copie le fichier war dans la racine de webapps
