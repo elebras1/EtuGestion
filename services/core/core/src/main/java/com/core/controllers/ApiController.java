@@ -16,9 +16,18 @@ public class ApiController {
     public ApiController(ApiService apiService) {
         this.apiService = apiService;
     }
+/*
+    @GetMapping("/academicyears/")
+    public Mono<String> get() {
+        return apiService.get();
+    }
 
     @GetMapping("/posts/{id}")
     public Mono<String> getPost(@PathVariable int id) {
         return apiService.getPostById(id);
+
+
     }
+
+ */
 }

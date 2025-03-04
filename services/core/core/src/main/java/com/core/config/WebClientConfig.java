@@ -14,7 +14,7 @@ public class WebClientConfig {
 
     @Bean
     public WebClient webClient(WebClient.Builder builder) {
-        return builder.baseUrl("https://jsonplaceholder.typicode.com") // Changez par votre API
+        return builder.baseUrl("") // Changez par votre API
                 .defaultHeader("Content-Type", "application/json")
                 .build();
     }
