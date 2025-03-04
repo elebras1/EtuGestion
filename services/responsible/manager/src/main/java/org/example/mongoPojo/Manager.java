@@ -7,13 +7,13 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 public class Manager {
 	
 	@BsonProperty("id")
-    private int id;
+    private long id;
 	
 	private String email;
 	private String nom;
 	private String prenom;
 	
-	public Manager (int id, String nom, String prenom, String email) {
+	public Manager (long id, String nom, String prenom, String email) {
 		this.id = id;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -48,11 +48,11 @@ public class Manager {
 		this.prenom = prenom;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 }

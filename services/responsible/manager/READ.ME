@@ -12,8 +12,20 @@ docker run -p 8080:8080 managers-api
 # héberge la API manager et la mongodb sous docker dans la racine de responsible pour le file docker compose
 docker-compose up --build
 
+
+
+# créer la base de donnée Manager dans mongoDB
+
+# se connecter à mongodb dans docker
 docker exec -it mongodb bash
 
+# accédé à mongodb
+mongosh
+
+# créer une database e22102349
+use e22102349
+
+# créer la table manager et insert un manager
 db.Manager.insertOne({
   id: 1,
   nom: "Dupont",

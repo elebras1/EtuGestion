@@ -41,7 +41,7 @@ public class ManagerServletMongo extends HttpServlet {
 	private MongoClient mongoClient;
 	private MongoCollection<Manager> managerDB;
 
-	private int maxId;
+	private long maxId;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -86,10 +86,10 @@ public class ManagerServletMongo extends HttpServlet {
 		return managers;
 	}
 
-	public int getMaxIdManagerMongo() {
+	public long getMaxIdManagerMongo() {
 		List<Manager> managers = this.getListeManagers();
 
-		int maxId = 0, tmp = 0;
+		long maxId = 0, tmp = 0;
 
 		for (Manager manager : managers) {
 			tmp = manager.getId();
@@ -117,7 +117,7 @@ public class ManagerServletMongo extends HttpServlet {
 
 		if (pathInfo != null && !pathInfo.isEmpty()) {
 
-			int id = Integer.parseInt(pathInfo);
+			long id = Integer.parseInt(pathInfo);
 			Manager manager = this.managerDB.find(Filters.eq("id", id)).first();
 
 			if (manager != null) {
@@ -187,7 +187,7 @@ public class ManagerServletMongo extends HttpServlet {
 		if (pathInfo != null && !pathInfo.isEmpty()) {
 			
 			try {
-				int id = Integer.parseInt(pathInfo);
+				long id = Integer.parseInt(pathInfo);
 
 				// document qui permet de stocker les données à modifier
 				Document update = new Document();
@@ -239,7 +239,7 @@ public class ManagerServletMongo extends HttpServlet {
 
 		if (pathInfo != null && !pathInfo.isEmpty()) {
 			try {
-				int id = Integer.parseInt(pathInfo);
+				long id = Integer.parseInt(pathInfo);
 
 				long delete = this.managerDB.deleteOne(Filters.eq("id", id)).getDeletedCount();
 
@@ -268,16 +268,4 @@ public class ManagerServletMongo extends HttpServlet {
 		}
 		super.destroy();
 	}
-
-	/*
-	 * /**
-	 * 
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 * response)
-	 */
-	/*
-	 * protected void doPost(HttpServletRequest request, HttpServletResponse
-	 * response) throws ServletException, IOException { // TODO Auto-generated
-	 * method stub doGet(request, response); }
-	 */
 }
