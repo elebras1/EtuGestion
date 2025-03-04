@@ -8,7 +8,7 @@ mvn clean package
 # Créer l'image docker de l'api managers
 docker build --no-cache -t managers-api .
 
-# héberge la API manager et la mongodb sous docker avec le file docker compose
+# héberge la API manager et la mongodb sous docker avec le file docker compose (il y a un tiret entre docker et compose)
 docker-compose up --build
 
 (Optionnel - à faire si les données génériques ne sont pas rajoutées dans la base MongodDB
