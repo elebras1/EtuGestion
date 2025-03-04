@@ -86,4 +86,29 @@ public class TeachingUnitServiceImpl implements TeachingUnitService {
     public List<TeachingUnitDto> getAllTeachingUnits() {
         return this.teachingUnitRepository.findAll().stream().map(this.teachingUnitMapper::toDto).toList();
     }
+
+    @Override
+    public boolean registerStudent(Long teachingUnitId, Long studentId) {
+        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(teachingUnitId).orElseThrow(() ->
+                new EntityNotFoundException("Teaching Unit not found"));
+        if(teachingUnit.getStudentsIds().contains(studentId) || (!teachingUnit.getIsRequired() && teachingUnit.getStudentsIds().size() >= teachingUnit.getCapacity())) {
+            return false;
+        }
+        teachingUnit.getStudentsIds().add(studentId);
+        this.teachingUnitRepository.save(teachingUnit);
+        return true;
+    }
+
+    @Override
+    public boolean unregisterStudent(Long teachingUnitId, Long studentId) {
+        TeachingUnit teachingUnit = this.teachingUnitRepository.findById(teachingUnitId).orElseThrow(() ->
+                new EntityNotFoundException("Teaching Unit not found"));
+        if(teachingUnit.getStudentsIds().contains(studentId)) {
+            teachingUnit.getStudentsIds().remove(studentId);
+            this.teachingUnitRepository.save(teachingUnit);
+            return true;
+        }
+
+        return false;
+    }
 }

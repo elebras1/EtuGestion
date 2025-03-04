@@ -14,4 +14,8 @@ public interface TeachingUnitService {
     boolean deleteTeachingUnit(Long teachingUnitId);
 
     List<TeachingUnitDto> getAllTeachingUnits();
+
+    boolean registerStudent(Long teachingUnitId, Long studentId);
+
+    boolean unregisterStudent(Long teachingUnitId, Long studentId);
 }
