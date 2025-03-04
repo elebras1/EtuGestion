@@ -8,6 +8,9 @@ services:
       - "27017:27017"  
     volumes:
       - mongodb-data:/data/db  
+      - ./init.js:/docker-entrypoint-initdb.d/init.js:ro
+    environment:
+      - MONGO_INITDB_DATABASE=e22102349
 
   manager-api:
     image: managers-api  
@@ -15,9 +18,9 @@ services:
     ports:
       - "8080:8080"  
     environment:
-      - MONGO_URI=mongodb://mongodb:27017  
+      - MONGO_URI=mongodb://mongodb:27017/e22102349  # Connexion avec la base spécifique
     depends_on:
       - mongodb  
 
 volumes:
-  mongodb-data: 
+  mongodb-data:

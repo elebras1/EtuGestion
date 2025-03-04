@@ -20,7 +20,6 @@ import org.bson.Document;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.types.ObjectId;
 import org.example.mongoPojo.Manager;
 
 import com.mongodb.ConnectionString;
@@ -56,8 +55,6 @@ public class ManagerServletMongo extends HttpServlet {
 		CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
 		CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
-		// ConnectionString connectionString = new ConnectionString("mongodb://obiwan.univ-brest.fr:27017");
-		//ConnectionString connectionString = new ConnectionString("mongodb://127.0.0.1:27017");
 		ConnectionString connectionString = new ConnectionString("mongodb://mongodb:27017");
 		
 		try {
@@ -209,7 +206,7 @@ public class ManagerServletMongo extends HttpServlet {
 					if (modif > 0) {
 						response.setStatus(HttpServletResponse.SC_OK);
 						response.setContentType("application/json");
-						response.getWriter().write("{\"description\":\"Responsable mis à jour avec succès.\"}");
+						response.getWriter().write("{\"description\":\"La responsable a été mis à jour avec succès.\"}");
 					} else {
 						response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 						response.setContentType("application/json");

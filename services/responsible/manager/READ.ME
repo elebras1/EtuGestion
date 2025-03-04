@@ -1,19 +1,19 @@
-# Faire le .war dans la racine de l'api (manager)
+# prérequis avoir maven d'installé sur sa machine pour effectuer la commande suivante
 
+# Emplacement dans la racine du projet (manager) de responsible
+# Faire le .war dans la racine de l'api (pas besoin si le .war est déjà présent)
 mvn clean package
 
+# API
 # Créer l'image docker de l'api managers
 docker build --no-cache -t managers-api .
 
-# l'héberge mais pas obligatoire car uniquement l'api
-docker run -p 8080:8080 managers-api
-
-
-# héberge la API manager et la mongodb sous docker dans la racine de responsible pour le file docker compose
+# héberge la API manager et la mongodb sous docker avec le file docker compose
 docker-compose up --build
 
-
-
+(Optionnel - à faire si les données génériques ne sont pas rajoutées dans la base MongodDB
+# vérifier à localhost:8080/managers , cela affiche les données des responsables si aucune faire les étapes suivantes)
+# DATABASE
 # créer la base de donnée Manager dans mongoDB
 
 # se connecter à mongodb dans docker
@@ -26,9 +26,15 @@ mongosh
 use e22102349
 
 # créer la table manager et insert un manager
-db.Manager.insertOne({
-  id: 1,
-  nom: "Dupont",
-  prenom: "Jean",
-  mail: "jean.dupont@example.com"
-})
+db.Manager.insertMany([
+  { id: 1, email: "alice.dupont@example.com", nom: "Dupont", prenom: "Alice" },
+  { id: 2, email: "bob.martin@example.com", nom: "Martin", prenom: "Bob" },
+  { id: 3, email: "charlie.durand@example.com", nom: "Durand", prenom: "Charlie" },
+  { id: 4, email: "diane.leroy@example.com", nom: "Leroy", prenom: "Diane" },
+  { id: 5, email: "edouard.perrin@example.com", nom: "Perrin", prenom: "Edouard" },
+  { id: 6, email: "francois.bernard@example.com", nom: "Bernard", prenom: "François" },
+  { id: 7, email: "gabrielle.moreau@example.com", nom: "Moreau", prenom: "Gabrielle" },
+  { id: 8, email: "hugo.renard@example.com", nom: "Renard", prenom: "Hugo" },
+  { id: 9, email: "isabelle.roux@example.com", nom: "Roux", prenom: "Isabelle" },
+  { id: 10, email: "julien.faure@example.com", nom: "Faure", prenom: "Julien" }
+]);
