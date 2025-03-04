@@ -2,6 +2,7 @@ package com.configuration;
 
 import com.entities.AcademicYear;
 import com.entities.Group;
+import com.entities.Request;
 import com.entities.TeachingUnit;
 import com.repositories.AcademicYearRepository;
 import com.repositories.GroupRepository;
@@ -143,5 +144,17 @@ public class DataInitializer implements CommandLineRunner {
         groupF.setAcademicYear(year2023);
         groupF.setStudentsIds(Arrays.asList(3005L, 3006L, 3007L, 3008L));
         groupRepository.save(groupF);
+
+        Request request1 = new Request();
+        request1.setAcademicYearId(year2021.getId());
+        request1.setStudentId(4001L);
+
+        Request request2 = new Request();
+        request2.setAcademicYearId(year2021.getId());
+        request2.setStudentId(4002L);
+
+        Request request3 = new Request();
+        request3.setAcademicYearId(year2023.getId());
+        request3.setStudentId(4003L);
     }
 }

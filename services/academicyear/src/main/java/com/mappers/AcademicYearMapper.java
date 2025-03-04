@@ -2,13 +2,7 @@ package com.mappers;
 
 import com.dtos.AcademicYearDto;
 import com.entities.AcademicYear;
-import com.entities.Group;
-import com.entities.TeachingUnit;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class AcademicYearMapper {
