@@ -18,7 +18,7 @@ services:
     ports:
       - "8080:8080"  
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/e22102349  # Connexion avec la base spécifique
+      - MONGO_URI=mongodb://mongodb:27017/e22102349
     depends_on:
       - mongodb  
 
