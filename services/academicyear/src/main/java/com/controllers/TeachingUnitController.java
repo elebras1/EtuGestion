@@ -41,4 +41,14 @@ public class TeachingUnitController {
     public boolean deleteTeachingUnit(@PathVariable Long id){
         return this.teachingUnitService.deleteTeachingUnit(id);
     }
+
+    @PostMapping("{id}/register/{studentId}")
+    public boolean registerStudent(@PathVariable Long id, @PathVariable Long studentId){
+        return this.teachingUnitService.registerStudent(id, studentId);
+    }
+
+    @PostMapping("{id}/unregister/{studentId}")
+    public boolean unregisterStudent(@PathVariable Long id, @PathVariable Long studentId){
+        return this.teachingUnitService.unregisterStudent(id, studentId);
+    }
 }

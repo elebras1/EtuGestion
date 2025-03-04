@@ -592,7 +592,7 @@ paths:
         '500':
           description: Erreur serveur interne
 
-  /teachingunits/{id}/register/{numEtudiant}:
+  /teachingunits/{id}/register/{studentId}:
     post:
       tags:
         - teachingUnits
@@ -607,7 +607,7 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: numEtudiant
+        - name: studentId
           in: path
           description: Numéro de l'étudiant
           required: true
@@ -626,7 +626,7 @@ paths:
         '500':
           description: Erreur serveur interne
 
-  /teachingunits/{id}/unregister/{numEtudiant}:
+  /teachingunits/{id}/unregister/{studentId}:
     post:
       tags:
         - teachingUnits
@@ -641,9 +641,9 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: numEtudiant
+        - name: studentId
           in: path
-          description: Numéro de l'étudiant
+          description: id de l'étudiant
           required: true
           schema:
             type: integer
