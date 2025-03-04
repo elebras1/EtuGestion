@@ -6,7 +6,9 @@ import com.entities.Request;
 import com.entities.TeachingUnit;
 import com.repositories.AcademicYearRepository;
 import com.repositories.GroupRepository;
+import com.repositories.RequestRepository;
 import com.repositories.TeachingUnitRepository;
+import com.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private TeachingUnitRepository teachingUnitRepository;
+
+    @Autowired
+    private RequestRepository requestRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -148,13 +153,16 @@ public class DataInitializer implements CommandLineRunner {
         Request request1 = new Request();
         request1.setAcademicYearId(year2021.getId());
         request1.setStudentId(4001L);
+        this.requestRepository.save(request1);
 
         Request request2 = new Request();
         request2.setAcademicYearId(year2021.getId());
         request2.setStudentId(4002L);
+        this.requestRepository.save(request2);
 
         Request request3 = new Request();
         request3.setAcademicYearId(year2023.getId());
         request3.setStudentId(4003L);
+        this.requestRepository.save(request3);
     }
 }
