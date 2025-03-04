@@ -1,7 +1,5 @@
 package org.example.mongoPojo;
 
-import org.bson.types.ObjectId;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 public class Manager {
