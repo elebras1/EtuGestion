@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
+    Request findByAcademicYearIdAndStudentId(Long academicYearId, Long studentId);
 }

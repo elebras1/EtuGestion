@@ -29,9 +29,28 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public RequestDto saveRequest(Long academicYearId, Long studentId) {
+        Request request = new Request();
+        request.setAcademicYearId(academicYearId);
+        request.setStudentId(studentId);
+        request = this.requestRepository.save(request);
+        return this.requestMapper.toDto(request);
+    }
+
+    @Override
     public boolean deleteRequest(Long requestId) {
         this.requestRepository.deleteById(requestId);
         return this.requestRepository.findById(requestId).isEmpty();
+    }
+
+    @Override
+    public boolean deleteRequest(Long academicYearId, Long studentId) {
+        Request request = this.requestRepository.findByAcademicYearIdAndStudentId(academicYearId, studentId);
+        if(request != null) {
+            this.requestRepository.delete(request);
+            return this.requestRepository.findByAcademicYearIdAndStudentId(academicYearId, studentId) == null;
+        }
+        return false;
     }
 
     @Override
@@ -41,5 +60,10 @@ public class RequestServiceImpl implements RequestService {
             requestDtos.add(this.requestMapper.toDto(request));
         }
         return requestDtos;
+    }
+
+    @Override
+    public boolean existsRequest(Long academicYearId, Long studentId) {
+        return this.requestRepository.findByAcademicYearIdAndStudentId(academicYearId, studentId) != null;
     }
 }

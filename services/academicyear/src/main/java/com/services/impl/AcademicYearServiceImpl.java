@@ -10,7 +10,9 @@ import com.mappers.AcademicYearMapper;
 import com.mappers.GroupMapper;
 import com.mappers.TeachingUnitMapper;
 import com.repositories.AcademicYearRepository;
+import com.repositories.GroupRepository;
 import com.services.AcademicYearService;
+import com.services.RequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +27,16 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     private final AcademicYearMapper academicYearMapper;
     private final GroupMapper groupMapper;
     private final TeachingUnitMapper teachingUnitMapper;
+    private final RequestService requestService;
+    private final GroupRepository groupRepository;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
         this.groupMapper = groupMapper;
         this.teachingUnitMapper = teachingUnitMapper;
+        this.requestService = requestService;
+        this.groupRepository = groupRepository;
     }
 
     @Override
@@ -121,5 +127,48 @@ public class AcademicYearServiceImpl implements AcademicYearService {
         }
 
         return teachingUnitDtos;
+    }
+
+    @Override
+    public boolean registerStudentToAcademicYear(Long academicYearId, Long studentId) {
+        return this.requestService.saveRequest(academicYearId, studentId) != null;
+    }
+
+    @Override
+    public boolean acceptStudentToAcademicYear(Long academicYearId, Long studentId) {
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        if (academicYear == null) {
+            return false;
+        }
+
+        boolean requestExists = this.requestService.existsRequest(academicYearId, studentId);
+        if (!requestExists) {
+            return false;
+        }
+
+        Group groupMin = null;
+        int minSize = Integer.MAX_VALUE;
+
+        for (Group group : academicYear.getGroups()) {
+            int groupSize = group.getStudentsIds().size();
+            if (groupSize < minSize) {
+                minSize = groupSize;
+                groupMin = group;
+            }
+        }
+
+        if (groupMin == null) {
+            return false;
+        }
+
+        groupMin.getStudentsIds().add(studentId);
+        this.groupRepository.save(groupMin);
+
+        return this.requestService.deleteRequest(academicYearId, studentId);
+    }
+
+    @Override
+    public boolean rejectStudentToAcademicYear(Long academicYearId, Long studentId) {
+        return this.requestService.deleteRequest(academicYearId, studentId);
     }
 }

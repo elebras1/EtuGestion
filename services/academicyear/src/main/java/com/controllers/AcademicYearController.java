@@ -12,7 +12,6 @@ import java.util.List;
 @RequestMapping("/academicyears")
 public class AcademicYearController {
     private final AcademicYearService academicYearService;
-
     public AcademicYearController(AcademicYearService academicYearService) {
         this.academicYearService = academicYearService;
     }
@@ -51,12 +50,27 @@ public class AcademicYearController {
     }
 
     @GetMapping("/{id}/groups")
-    public List<GroupDto> getGroupsByAcademicYear(final @PathVariable Long id){
+    public List<GroupDto> getGroupsByAcademicYear(@PathVariable Long id){
         return this.academicYearService.getGroupsByAcademicYear(id);
     }
 
     @GetMapping("/{id}/teachingunits")
-    public List<TeachingUnitDto> getTeachingUnitsByAcademicYear(final @PathVariable Long id){
+    public List<TeachingUnitDto> getTeachingUnitsByAcademicYear(@PathVariable Long id){
         return this.academicYearService.getTeachingUnitsByAcademicYear(id);
+    }
+
+    @PostMapping("/{id}/register/{studentId}")
+    public boolean registerStudentToAcademicYear(@PathVariable Long id, @PathVariable Long studentId){
+        return this.academicYearService.registerStudentToAcademicYear(id, studentId);
+    }
+
+    @PostMapping("/{id}/accept/{studentId}")
+    public boolean acceptStudentToAcademicYear(@PathVariable Long id, @PathVariable Long studentId){
+        return this.academicYearService.acceptStudentToAcademicYear(id, studentId);
+    }
+
+    @PostMapping("/{id}/reject/{studentId}")
+    public boolean rejectStudentToAcademicYear(@PathVariable Long id, @PathVariable Long studentId){
+            return this.academicYearService.rejectStudentToAcademicYear(id, studentId);
     }
 }
