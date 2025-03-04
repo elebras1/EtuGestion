@@ -2,6 +2,7 @@ package com.controllers;
 
 import com.dtos.AcademicYearDto;
 import com.dtos.GroupDto;
+import com.dtos.TeachingUnitDto;
 import com.services.AcademicYearService;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +53,10 @@ public class AcademicYearController {
     @GetMapping("/{id}/groups")
     public List<GroupDto> getGroupsByAcademicYear(final @PathVariable Long id){
         return this.academicYearService.getGroupsByAcademicYear(id);
+    }
+
+    @GetMapping("/{id}/teachingunits")
+    public List<TeachingUnitDto> getTeachingUnitsByAcademicYear(final @PathVariable Long id){
+        return this.academicYearService.getTeachingUnitsByAcademicYear(id);
     }
 }

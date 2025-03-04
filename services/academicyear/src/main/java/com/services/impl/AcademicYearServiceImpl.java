@@ -2,10 +2,13 @@ package com.services.impl;
 
 import com.dtos.AcademicYearDto;
 import com.dtos.GroupDto;
+import com.dtos.TeachingUnitDto;
 import com.entities.AcademicYear;
 import com.entities.Group;
+import com.entities.TeachingUnit;
 import com.mappers.AcademicYearMapper;
 import com.mappers.GroupMapper;
+import com.mappers.TeachingUnitMapper;
 import com.repositories.AcademicYearRepository;
 import com.services.AcademicYearService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,11 +24,13 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     private final AcademicYearRepository academicYearRepository;
     private final AcademicYearMapper academicYearMapper;
     private final GroupMapper groupMapper;
+    private final TeachingUnitMapper teachingUnitMapper;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
         this.groupMapper = groupMapper;
+        this.teachingUnitMapper = teachingUnitMapper;
     }
 
     @Override
@@ -101,5 +106,20 @@ public class AcademicYearServiceImpl implements AcademicYearService {
         }
 
         return groupDtos;
+    }
+
+    @Override
+    public List<TeachingUnitDto> getTeachingUnitsByAcademicYear(Long academicYearId) {
+        AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElse(null);
+        if (academicYear == null) {
+            return null;
+        }
+
+        List<TeachingUnitDto> teachingUnitDtos = new ArrayList<>();
+        for(TeachingUnit teachingUnit : academicYear.getTeachingUnits()) {
+            teachingUnitDtos.add(this.teachingUnitMapper.toDto(teachingUnit));
+        }
+
+        return teachingUnitDtos;
     }
 }
