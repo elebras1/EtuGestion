@@ -8,8 +8,10 @@ import com.repositories.AcademicYearRepository;
 import com.repositories.GroupRepository;
 import com.services.GroupService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDto saveGroup(GroupDto groupDto) {
         AcademicYear academicYear = this.academicYearRepository.findById(groupDto.getAcademicYearId())
-                .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
         Group group = this.groupMapper.toEntity(groupDto);
         group.setAcademicYear(academicYear);
         group = this.groupRepository.save(group);
@@ -47,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
         }
         if (groupDto.getAcademicYearId() != null) {
             AcademicYear academicYear = this.academicYearRepository.findById(groupDto.getAcademicYearId())
-                    .orElseThrow(() -> new EntityNotFoundException("Academic Year not found"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
             group.setAcademicYear(academicYear);
         }
         if(groupDto.getStudentsIds() != null) {
@@ -64,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDto getGroupById(Long groupId) {
         Group group = this.groupRepository.findById(groupId).orElseThrow(() ->
-                new EntityNotFoundException("Group not found"));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
         return this.groupMapper.toDto(group);
     }
 

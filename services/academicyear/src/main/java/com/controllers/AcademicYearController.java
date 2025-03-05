@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/academicyears")
 public class AcademicYearController {
+    final String scraperUrl = "http://localhost:9090/scraper";
     private final AcademicYearService academicYearService;
     public AcademicYearController(AcademicYearService academicYearService) {
         this.academicYearService = academicYearService;
@@ -77,6 +78,6 @@ public class AcademicYearController {
     @PostMapping("/scraper")
     public void saveAcademicYearFromScraper() {
         System.out.println("Scraper appel");
-        this.academicYearService.saveAcademicYearFromScraper("http://localhost:9090/scraper");
+        this.academicYearService.saveAcademicYearFromScraper(this.scraperUrl);
     }
 }

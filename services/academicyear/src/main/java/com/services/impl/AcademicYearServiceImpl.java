@@ -14,9 +14,11 @@ import com.services.AcademicYearService;
 import com.services.RequestService;
 import com.services.TeachingUnitService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public AcademicYearDto updateAcademicYear(AcademicYearDto academicYearDto) {
         AcademicYear academicYear = this.academicYearRepository.findById(academicYearDto.getId()).orElseThrow(() ->
-                new EntityNotFoundException("Academic year not found"));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
 
         if (academicYearDto.getName() != null) {
             academicYear.setName(academicYearDto.getName());
@@ -81,7 +83,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
         AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElseThrow(() ->
-                new EntityNotFoundException("Academic year not found"));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
         return this.academicYearMapper.toDto(academicYear);
     }
 
