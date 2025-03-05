@@ -1,50 +1,38 @@
 <script setup>
+import { ref } from 'vue';
 import AcademicYear from './components/AcademicYear.vue';
-import HelloWorld from './components/HelloWorld.vue'
-import Manager from './components/Manager.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Manager from './components/Manager.vue';
+import Navbar from './components/Navbar.vue';
+
+const currentView = ref('manager');
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <Navbar @update-view="(view) => currentView = view" />
   </header>
 
   <main>
-    <Manager />
-    <AcademicYear />
+    <Manager v-if="currentView === 'manager'" />
+    <AcademicYear v-if="currentView === 'academicYear'" />
   </main>
 </template>
 
 <style scoped>
 header {
-  line-height: 1.5;
+  width: 100%;
+  flex-shrink: 0;
+  background: #333;
+  padding: 10px 0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 </style>
