@@ -379,6 +379,37 @@ paths:
         '500':
           description: Erreur serveur interne
 
+  /academicyears/scraper:
+    post:
+      tags:
+        - academic-years
+      summary: Scraper les formations pour une année donnée
+      description: Récupère les formations depuis `https://formations.univ-brest.fr` et les envoie à une API de stockage.
+      operationId: scrapeFormations
+      responses:
+        '200':
+          description: Formations récupérées et envoyées avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Formations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AcademicYearDto'
+                    description: Liste des formations récupérées
+        '500':
+          description: Erreur interne du serveur lors du scraping ou de l'envoi des données
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Erreur lors du scraping ou de l'envoi des données. Veuillez réessayer plus tard."
+
   /groups/{id}:
     get:
       tags:

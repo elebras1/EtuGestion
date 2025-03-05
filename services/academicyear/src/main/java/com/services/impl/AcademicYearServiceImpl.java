@@ -1,11 +1,10 @@
 package com.services.impl;
 
-import com.dtos.AcademicYearDto;
-import com.dtos.GroupDto;
-import com.dtos.TeachingUnitDto;
+import com.dtos.*;
 import com.entities.AcademicYear;
 import com.entities.Group;
 import com.entities.TeachingUnit;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mappers.AcademicYearMapper;
 import com.mappers.GroupMapper;
 import com.mappers.TeachingUnitMapper;
@@ -13,9 +12,11 @@ import com.repositories.AcademicYearRepository;
 import com.repositories.GroupRepository;
 import com.services.AcademicYearService;
 import com.services.RequestService;
+import com.services.TeachingUnitService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +27,23 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     private final AcademicYearRepository academicYearRepository;
     private final AcademicYearMapper academicYearMapper;
     private final GroupMapper groupMapper;
+    private final TeachingUnitService teachingUnitService;
     private final TeachingUnitMapper teachingUnitMapper;
     private final RequestService requestService;
     private final GroupRepository groupRepository;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository, RestTemplate restTemplate, ObjectMapper objectMapper, TeachingUnitService teachingUnitService) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
         this.groupMapper = groupMapper;
         this.teachingUnitMapper = teachingUnitMapper;
         this.requestService = requestService;
         this.groupRepository = groupRepository;
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
+        this.teachingUnitService = teachingUnitService;
     }
 
     @Override
@@ -70,7 +77,6 @@ public class AcademicYearServiceImpl implements AcademicYearService {
         academicYear = this.academicYearRepository.save(academicYear);
         return this.academicYearMapper.toDto(academicYear);
     }
-
 
     @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
@@ -170,5 +176,41 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public boolean rejectStudentToAcademicYear(Long academicYearId, Long studentId) {
         return this.requestService.deleteRequest(academicYearId, studentId);
+    }
+
+    @Override
+    public void saveAcademicYearFromScraper(String url) {
+        String data = this.restTemplate.getForObject(url, String.class);
+        System.out.println(data);
+        String[] jsonStrings = data.split("-----");
+        for (String jsonString : jsonStrings) {
+            try {
+                ScraperAcademicYearDto scraperDto = this.objectMapper.readValue(jsonString, ScraperAcademicYearDto.class);
+                this.saveScraperAcademicYearDto(scraperDto);
+            } catch (Exception e) {
+                System.out.println("Erreur lors de la conversion du JSON : " + e.getMessage());
+            }
+        }
+    }
+
+    public void saveScraperAcademicYearDto(ScraperAcademicYearDto scraperDto) {
+        try {
+            AcademicYearDto academicYearDto = new AcademicYearDto();
+            academicYearDto.setName(scraperDto.getName());
+            academicYearDto.setPraticalWorkSize(scraperDto.getTpSize());
+            academicYearDto.setDirectedWorkSize(scraperDto.getTdSize());
+            academicYearDto.setNumberOptionalTeachingUnit(scraperDto.getOptionsNumber());
+            academicYearDto = this.saveAcademicYear(academicYearDto);
+            for (ScraperTeachingUnitDto scraperTeachingUnitDto : scraperDto.getTeachingUnits()) {
+                TeachingUnitDto teachingUnitDto = new TeachingUnitDto();
+                teachingUnitDto.setName(scraperTeachingUnitDto.getName());
+                teachingUnitDto.setAcademicYearId(academicYearDto.getId());
+                teachingUnitDto.setCapacity(scraperTeachingUnitDto.getCapacity());
+                teachingUnitDto.setIsRequired(scraperTeachingUnitDto.getIsMandatory());
+                this.teachingUnitService.saveTeachingUnit(teachingUnitDto);
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la conversion du JSON : " + e.getMessage());
+        }
     }
 }

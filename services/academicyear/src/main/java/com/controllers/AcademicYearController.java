@@ -73,4 +73,10 @@ public class AcademicYearController {
     public boolean rejectStudentToAcademicYear(@PathVariable Long id, @PathVariable Long studentId){
             return this.academicYearService.rejectStudentToAcademicYear(id, studentId);
     }
+
+    @PostMapping("/scraper")
+    public void saveAcademicYearFromScraper() {
+        System.out.println("Scraper appel");
+        this.academicYearService.saveAcademicYearFromScraper("http://localhost:9090/scraper");
+    }
 }
