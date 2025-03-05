@@ -16,7 +16,6 @@ import com.services.TeachingUnitService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +37,15 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     private final TeachingUnitMapper teachingUnitMapper;
     private final RequestService requestService;
     private final GroupRepository groupRepository;
-    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository, RestTemplate restTemplate, ObjectMapper objectMapper, TeachingUnitService teachingUnitService) {
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository, ObjectMapper objectMapper, TeachingUnitService teachingUnitService) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
         this.groupMapper = groupMapper;
         this.teachingUnitMapper = teachingUnitMapper;
         this.requestService = requestService;
         this.groupRepository = groupRepository;
-        this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.teachingUnitService = teachingUnitService;
     }
