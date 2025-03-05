@@ -1,14 +1,17 @@
 package com.core.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
 
 @Service
 public class ResponsibleService {
 
     private final WebClient webClient;
-    private String baseUrl = "http://jesaispas:8080";  // URL de l'API des responsables
+    private String baseUrl = "http://localhost:8082";  // URL de l'API des responsables
 
     // Injection du WebClient via le constructeur
     public ResponsibleService(WebClient.Builder webClientBuilder) {

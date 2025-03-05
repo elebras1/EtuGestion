@@ -4,7 +4,9 @@ import com.core.services.ResponsibleService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
+@RequestMapping("/managers")
 
 public class ResponsibleController {
 
