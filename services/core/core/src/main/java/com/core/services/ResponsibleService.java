@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 public class ResponsibleService {
 
     private final WebClient webClient;
-    private String baseUrl = "http://localhost:8082";  // URL de l'API des responsables
+    private String baseUrl = "http://manager-api:8080";  // URL de l'API des responsables
 
     // Injection du WebClient via le constructeur
     public ResponsibleService(WebClient.Builder webClientBuilder) {

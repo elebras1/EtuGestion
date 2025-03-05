@@ -1,10 +1,45 @@
 ﻿services:
-  mariadb:
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: monMotDePasseSuperSecret
-      MYSQL_DATABASE: test
-    volumes:
-      - /public/elebras /data:/var/lib/mysql
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
     ports:
-      - "3306:3306"
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - ./init.js:/docker-entrypoint-initdb.d/init.js:ro
+    environment:
+      - MONGO_INITDB_DATABASE=e22102349
+    networks:
+      - core_mynetwork
+
+  core-api:
+    image: openjdk:17-jdk-slim
+    container_name: core-api
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - EXTERNAL_API_URL=http://manager-api:8080
+    networks:
+      - core_mynetwork
+
+  manager-api:
+    image: managers-api
+    container_name: manager-api
+    ports:
+      - "8082:8080"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/e22102349
+    depends_on:
+      - mongodb
+    networks:
+      - core_mynetwork
+
+volumes:
+  mongodb-data:
+
+networks:
+  core_mynetwork:
+    driver: bridge
