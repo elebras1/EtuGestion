@@ -4,6 +4,7 @@ import com.core.services.AuthService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 
 public class AuthCoreController {

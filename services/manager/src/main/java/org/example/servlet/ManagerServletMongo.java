@@ -137,12 +137,12 @@ public class ManagerServletMongo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		// Id incrémenté pour la création d'un nouveau responsable
+		maxId++;
+
 		ObjectMapper objectMap = new ObjectMapper();
 		Manager manager = objectMap.readValue(request.getReader(), Manager.class);
 		manager.setId(maxId);
-
-		// Id incrémenté pour la création d'un nouveau responsable
-		maxId++;
 
 		try {
 			if (manager.getId() <= 0 || manager.getEmail() == null || manager.getNom() == null
