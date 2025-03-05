@@ -27,6 +27,7 @@ const editAcademicYear = ref({
 const showAddForm = ref(false)
 const showScraperInfo = ref(false)
 const showEditForm = ref(false)
+const errorMessage = ref('') // Message d'erreur
 
 // Récupérer les formations depuis le serveur
 const fetchAcademicYears = async () => {
@@ -34,7 +35,8 @@ const fetchAcademicYears = async () => {
         const response = await axios.get(URL + '/academicyears')
         academicYears.value = response.data
     } catch (error) {
-        console.error("Erreur lors de la récupération des formations :", error)
+        errorMessage.value = "Erreur lors de la récupération des formations : " + error.message
+        console.error(errorMessage.value)
     }
 }
 
@@ -52,7 +54,8 @@ const getDetails = async (id) => {
             teachingUnits: teachingUnitsResponse.data
         }
     } catch (error) {
-        console.error("Erreur lors de la récupération des détails de la formation :", error)
+        errorMessage.value = "Erreur lors de la récupération des détails de la formation : " + error.message
+        console.error(errorMessage.value)
     }
 }
 
@@ -84,6 +87,30 @@ const toggleEditForm = (academicYear) => {
     }
 }
 
+// Fonction pour ajouter une nouvelle formation
+const addAcademicYear = async () => {
+    try {
+        const response = await axios.post(URL + '/academicyears', newAcademicYear.value)
+        const addedYear = response.data
+        // Ajouter la nouvelle formation à la liste
+        academicYears.value.push(addedYear)
+        // Réinitialiser le formulaire
+        newAcademicYear.value = {
+            name: '',
+            praticalWorkSize: 0,
+            directedWorkSize: 0,
+            numberOptionalTeachingUnit: 0,
+            responsibleId: undefined
+        }
+        // Masquer le formulaire d'ajout après l'ajout
+        showAddForm.value = false
+    } catch (error) {
+        errorMessage.value = "Erreur lors de l'ajout de la formation : " + error.message
+        console.error(errorMessage.value)
+    }
+}
+
+
 // Fonction pour mettre à jour une formation
 const updateAcademicYear = async () => {
     try {
@@ -97,7 +124,8 @@ const updateAcademicYear = async () => {
         // Masquer le formulaire après la mise à jour
         showEditForm.value = false
     } catch (error) {
-        console.error("Erreur lors de la mise à jour de la formation :", error)
+        errorMessage.value = "Erreur lors de la mise à jour de la formation : " + error.message
+        console.error(errorMessage.value)
     }
 }
 
@@ -108,13 +136,19 @@ const deleteAcademicYear = async (id) => {
         // Supprimer la formation de la liste locale après suppression
         academicYears.value = academicYears.value.filter(year => year.id !== id)
     } catch (error) {
-        console.error("Erreur lors de la suppression de la formation :", error)
+        errorMessage.value = "Erreur lors de la suppression de la formation : " + error.message
+        console.error(errorMessage.value)
     }
 }
 </script>
 
 <template>
     <div>
+        <!-- Affichage des messages d'erreur -->
+        <div v-if="errorMessage" class="error-message">
+            <p>{{ errorMessage }}</p>
+        </div>
+
         <!-- Boutons de gestion -->
         <button @click="toggleAddForm">Ajouter</button>
         <button @click="startScraper">Scraper</button>
@@ -265,5 +299,11 @@ li {
 button {
     margin-top: 10px;
     cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 </style>
