@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/managers")  // La route de base pour les responsables
+
 public class ResponsibleController {
 
     private final ResponsibleService ResponsibleService;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+
 public class ApiController {
 
     private final ApiService apiService;
@@ -17,17 +17,16 @@ public class ApiController {
         this.apiService = apiService;
     }
 /*
-    @GetMapping("/academicyears/")
-    public Mono<String> get() {
-        return apiService.get();
+    @GetMapping("...")
+    public Mono<String> ...() {
+        return apiService....();
     }
 
-    @GetMapping("/posts/{id}")
-    public Mono<String> getPost(@PathVariable int id) {
-        return apiService.getPostById(id);
+    @GetMapping("...")
+    public Mono<String> ...(@PathVariable int id) {
+        return apiService....(id);
 
 
     }
-
- */
+*/
 }

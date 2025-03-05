@@ -16,33 +16,1370 @@ tags:
     description: Endpoints principaux de l'API Core
 
 paths:
-  /core/data:
+  /messages/student/{student}:
     get:
-      summary: Récupère les données du Core
-      description: Retourne un objet contenant des informations sur le Core.
+      summary: Get all messages for a student
       tags:
-        - core
+        - Messages
+      parameters:
+        - name: student
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
-        "200":
-          description: Succès - Retourne les données du Core
+        '200':
+          description: List of messages
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CoreData"
-        "500":
-          description: Erreur serveur
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
 
+  /messages:
+    post:
+      summary: Create a new message
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          description: Message created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: Invalid input
+
+  /messages/{id}:
+    get:
+      summary: Get a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Message found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+    put:
+      summary: Update a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: Message updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          description: Invalid input
+        '404':
+          description: Message not found
+    delete:
+      summary: Delete a message by ObjectId
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Message deleted
+        '404':
+          description: Message not found
+  /auth/reset-password/{username}:
+    put:
+      tags:
+        - auth-controller
+      operationId: resetPassword
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+  /auth/register:
+    post:
+      tags:
+        - auth-controller
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Already registered
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicError'
+  /auth/login:
+    post:
+      tags:
+        - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Invalid credentials
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicError'
+  /auth/me:
+    get:
+      tags:
+        - auth-controller
+      operationId: validateToken
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+        '400':
+          description: Invalid token
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicError'
+        '403':
+          description: Banned token
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicError'
+  /auth/unregister:
+    delete:
+      tags:
+        - auth-controller
+      operationId: unregister
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+        '400':
+          description: Invalid credentials
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/BasicError'
+  /auth/logout:
+    delete:
+      tags:
+        - auth-controller
+      operationId: logout
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /students/{id}:
+    get:
+      tags:
+        - student-controller
+      summary: Récupérer un étudiant par ID
+      description: Retourne les informations d'un étudiant à partir de son ID.
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Étudiant récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+    put:
+      tags:
+        - student-controller
+      summary: Mettre à jour un étudiant
+      description: Modifie les informations d'un étudiant existant.
+      operationId: updateStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant à mettre à jour
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Informations mises à jour de l'étudiant
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '200':
+          description: Étudiant mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+    delete:
+      tags:
+        - student-controller
+      summary: Supprimer un étudiant
+      description: Supprime un étudiant de la base de données à partir de son ID.
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID unique de l'étudiant à supprimer
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Étudiant supprimé avec succès
+  /students:
+    get:
+      tags:
+        - student-controller
+      summary: Récupérer la liste des étudiants
+      description: Retourne la liste complète des étudiants enregistrés dans la base de données.
+      operationId: getAllStudents
+      parameters:
+        - in: query
+          name: formation
+          schema:
+            type: integer
+            format: int64
+          description: Filtre les étudiants par formation
+      responses:
+        '200':
+          description: Liste des étudiants récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    post:
+      tags:
+        - student-controller
+      summary: Ajouter un nouvel étudiant
+      description: Ajoute un nouvel étudiant à la base de données.
+      operationId: createStudent
+      requestBody:
+        description: Données du nouvel étudiant à enregistrer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        '201':
+          description: Étudiant créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+  /managers:
+    get:
+      summary: Liste tous les responsables
+      description: Renvoie une liste de tous les responsables des années de formations.
+      responses:
+        '200':
+          description: Une liste de responsable
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/manager'
+    post:
+      summary: Ajoute un nouveau responsable
+      description: Ajoute un nouveau responsable dans la table de responsable.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manager'
+      responses:
+        '201':
+          description: Responsable créé avec succès
+        '400':
+          description: Requête invalide
+
+  /managers/{id}:
+    get:
+      summary: Trouver un responsable par son id
+      description: Renvoie un responsable spécifique identifié par son id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: l'id du responsable à trouver.
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Détails d'un responsable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manager'
+        '404':
+          description: responsable non trouvé
+    put:
+      summary: Met à jour un responsable
+      description: Met à jour les informations d'un responsable spécifique.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: l'id du responsable à mettre à jour.
+          schema:
+            type: long
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manager'
+      responses:
+        '200':
+          description: Le responsable a été mis à jour avec succès
+        '404':
+          description: responsable non trouvé
+        '400':
+          description: Requête invalide
+    delete:
+      summary: Supprime un responsable
+      description: Supprime un responsable spécifique de la table responsable.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: L'id du responsable à supprimer.
+          schema:
+            type: long
+      responses:
+        '200':
+          description: Responsable supprimé avec succès
+        '404':
+          description: Responsable non trouvé
+  /academicyears:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère toutes les formations
+      description: Retourne la liste complète des formations
+      operationId: getAllAcademicYears
+      responses:
+        '200':
+          description: Liste des formations récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AcademicYearDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - academic-years
+      summary: Création d'une nouvelle formation
+      description: Ajoute une nouvelle formation
+      operationId: createAcademicYears
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYearDto'
+      responses:
+        '201':
+          description: Formation créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère une formation par son ID
+      description: Retourne les détails d'une formation spécifique
+      operationId: getAcademicYearsById
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Formation trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+    put:
+      tags:
+        - academic-years
+      summary: Met à jour une formation
+      description: Met à jour une formation du système par son ID
+      operationId: updateFormation
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademicYearDto'
+      responses:
+        '200':
+          description: Formation mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademicYearDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - academic-years
+      summary: Supprime une formation
+      description: Supprime une formation du système par son ID
+      operationId: deleteFormation
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Formation supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/students:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les étudiants d'une formation
+      description: Retourne la liste des étudiants d'une formation
+      operationId: getStudentsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des étudiants récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                  example: 1
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/groups:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les groupes d'une formation
+      description: Retourne la liste des groupes d'une formation
+      operationId: getGroupsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des groupes récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/teachingunits:
+    get:
+      tags:
+        - academic-years
+      summary: Récupère les ues d'une formation
+      description: Retourne la liste des ues d'une formation
+      operationId: getTeachingUnitsByAcademicYear
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Liste des ues récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/register/{studentId}:
+    post:
+      tags:
+        - academic-years
+      summary: Demande d'inscription d'un étudiant a une formation
+      description: Inscrit un étudiant dans une formation
+      operationId: registerStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          description: Id de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant inscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/accept/{studentId}:
+    post:
+      tags:
+        - academic-years
+      summary: Accepte un étudiant dans une formation
+      description: Accepte un étudiant dans une formation
+      operationId: acceptStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          description: Id de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant accepté avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /academicyears/{id}/reject/{studentId}:
+    post:
+      tags:
+        - academic-years
+      summary: Refuse un étudiant dans une formation
+      description: Refuse un étudiant dans une formation
+      operationId: rejectStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de la formation
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          description: Id de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant refusé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Formation non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /groups:
+    get:
+      tags:
+        - groups
+      summary: Récupère tout les groupes
+      description: Retourne la liste complète des groupes
+      operationId: getAllGroups
+      responses:
+        '200':
+          description: Liste des groupes récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - groups
+      summary: Création d'un nouveau groupe
+      description: Ajoute d'un nouveau groupe
+      operationId: createGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupDto'
+      responses:
+        '201':
+          description: Groupe créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /groups/{id}:
+    get:
+      tags:
+        - groups
+      summary: Récupère un groupe par son ID
+      description: Retourne les détails d'un groupe spécifique
+      operationId: getGroupById
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Groupe trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    put:
+      tags:
+        - groups
+      summary: Met à jour un groupe
+      description: Met à jour un groupe du système par son ID
+      operationId: updateGroup
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupDto'
+      responses:
+        '200':
+          description: Groupe mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - groups
+      summary: Supprime un groupes
+      description: Supprime un groupe du système par son ID
+      operationId: deleteGroup
+      parameters:
+        - name: id
+          in: path
+          description: ID du groupe à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Groupe supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Groupe non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits:
+    get:
+      tags:
+        - teachingUnits
+      summary: Récupère tout les ues
+      description: Retourne la liste complète des ues
+      operationId: getAllTeachingUnits
+      responses:
+        '200':
+          description: Liste des ues récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeachingUnitDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - teachingUnits
+      summary: Création d'une nouvelle ue
+      description: Ajout d'une nouvelle ue
+      operationId: createTeachingUnit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeachingUnitDto'
+      responses:
+        '201':
+          description: UE créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/{id}:
+    get:
+      tags:
+        - teachingUnits
+      summary: Récupère une ue par son ID
+      description: Retourne les détails d'une ue spécifique
+      operationId: getTeachingUnitById
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: UE trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    put:
+      tags:
+        - teachingUnits
+      summary: Met à jour une ue
+      description: Met à jour une ue du système par son ID
+      operationId: updateTeachingUnit
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeachingUnitDto'
+      responses:
+        '200':
+          description: UE mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeachingUnitDto'
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - teachingUnits
+      summary: Supprime une ue
+      description: Supprime une ue du système par son ID
+      operationId: deleteTeachingUnit
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: UE supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/{id}/register/{numEtudiant}:
+    post:
+      tags:
+        - teachingUnits
+      summary: Inscrit un étudiant dans une ue
+      description: Inscrit un étudiant dans une ue
+      operationId: registerStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant inscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /teachingunits/{id}/unregister/{numEtudiant}:
+    post:
+      tags:
+        - teachingUnits
+      summary: Désinscrit un étudiant dans une ue
+      description: Désinscrit un étudiant dans une ue
+      operationId: unregisterStudent
+      parameters:
+        - name: id
+          in: path
+          description: ID de l'ue
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: numEtudiant
+          in: path
+          description: Numéro de l'étudiant
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Etudiant désinscrit avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: UE non trouvé
+        '500':
+          description: Erreur serveur interne
+
+  /requests:
+    get:
+      tags:
+        - requests
+      summary: Récupère tout les demandes
+      description: Retourne la liste complète des demandes d'inscription au formations
+      operationId: getAllRequests
+      responses:
+        '200':
+          description: Liste des demandes récupéré avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        '500':
+          description: Erreur serveur interne
 components:
   schemas:
-    CoreData:
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique ObjectId of the message
+          example: 5f92cdce0cf217478ba93563
+        text:
+          type: string
+          description: Message content
+          example: Votre inscription au Master TIIL-A a été accepter.
+        readed:
+          type: boolean
+          description: Message read status
+          example: false
+        student:
+          type: integer
+          description: ID of the student associated with the message
+          example: 26
+      required:
+        - text
+        - student
+        - readed
+    BasicResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    BasicError:
+        type: object
+        properties:
+          error:
+            type: string
+    RegisterRequest:
+        required:
+          - password
+          - student
+          - username
+        type: object
+        properties:
+          username:
+            type: string
+          password:
+            type: string
+          student:
+            type: integer
+            format: int64
+    AuthRequest:
+        required:
+          - password
+          - username
+        type: object
+        properties:
+          username:
+            type: string
+          password:
+            type: string
+    TokenResponse:
+        type: object
+        properties:
+          message:
+            type: string
+          token:
+            type: string
+    MeResponse:
+        type: object
+        properties:
+          ok:
+            type: boolean
+          studentNumber:
+            type: integer
+            format: int64
+    Student:
+      required:
+        - adress
+        - firstname
+        - surname
       type: object
       properties:
         id:
           type: integer
+          format: int64
+          description: Identifiant unique de l'étudiant
+        academicYearRegistered:
+          type: boolean
+          description: Indique si l'étudiant est inscrit pour l'année académique en cours
+        coursesId:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Liste des identifiants des cours suivis par l'étudiant
+        academicYearId:
+          type: integer
+          format: int64
+          description: Identifiant de l'année académique
+        surname:
+          type: string
+          description: Nom de famille de l'étudiant
+        firstname:
+          type: string
+          description: Prénom de l'étudiant
+        adress:
+          type: string
+          description: Adresse de l'étudiant
+        pw:
+          minimum: 1
+          type: integer
+          format: int32
+          description: ID du groupe de TP de l'étudiant (PW)
+        dw:
+          minimum: 1
+          type: integer
+          format: int32
+          description: ID du groupe de TD de l'étudiant (DW)
+    manager:
+      type: object
+      required:
+        - email
+        - nom
+        - prenom
+      properties:
+        id:
+          type: long
+          description: l'identifiant d'un responsable.
+        email:
+          type: string
+          description: L'email du responsable.
+        nom:
+          type: string
+          description: nom du responsable.
+        prenom:
+          type: string
+          description: prénom du responsable.
+    AcademicYearDto:
+      type: object
+      description: Représentation d'une formation dans le système
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique d'une formation
           example: 1
         name:
           type: string
-          example: "Core API"
-        status:
-          type: string
-          example: "Active"
+          description: Nom de la formation
+          example: Master 1 TIIl-A
+        praticalWorkSize:
+          type: int16
+          description: Taille max des groupes de tp
+          example: 28
+        directedWorkSize:
+          type: int16
+          description: Taille max des groupes de td
+          example: 45
+        numberOptionalTeachingUnit:
+          type: int16
+          description: Le nombre d'ue optionnel qu'un étudiant doit choisir
+        responsibleId:
+          type: integer
+          format: int64
+          example: 4
+          description: Identifiant du responsable
+      required:
+        - name
+        - praticalWorkSize
+        - directedWorkSize
+        - numberOptionalTeachingUnit
+
+    GroupDto:
+        type: object
+        description: Représentation d'un groupe dans le système
+        properties:
+          id:
+            type: integer
+            format: int64
+            description: Identifiant unique d'un groupe
+            example: 1
+          name:
+            type: string
+            description: Nom du groupe
+            example: Groupe 1
+          academicYearId:
+            type: integer
+            format: int64
+            description: Identifiant de la formation
+            example: 1
+          studentsIds:
+            type: array
+            description: Liste des identifiants des étudiants du groupe
+            items:
+              type: integer
+              format: int64
+              example: 1
+        required:
+          - name
+          - academicYearId
+
+    TeachingUnitDto:
+        type: object
+        description: Représentation d'une unité d'enseignement dans le système
+        properties:
+          id:
+            type: integer
+            format: int64
+            description: Identifiant unique d'une unité d'enseignement
+            example: 1
+          name:
+            type: string
+            description: Nom de l'unité d'enseignement
+            example: Systèmes d'information
+          isRequired:
+            type: boolean
+            description: Indique si l'ue est obligatoire
+            example: true
+          capacity:
+            type: int16
+            description: Nombre d'étudiants maximum pour l'ue
+            example: 30
+          academicYearId:
+            type: integer
+            format: int64
+            description: Identifiant de la formation
+          responsibleId:
+            type: integer
+            format: int64
+            example: 4
+            description: Identifiant du responsable
+          studentsIds:
+            type: array
+            description: Liste des identifiants des étudiants inscrits
+            items:
+              type: integer
+              format: int64
+              example: 8
+        required:
+          - name
+          - isRequired
+          - capacity
+          - academicYearId
+
+    RequestDto:
+        type: object
+        description: Représentation d'une demande d'inscription dans le système
+        properties:
+          id:
+            type: integer
+            format: int64
+            description: Identifiant unique d'une demande
+            example: 1
+          studentId:
+            type: integer
+            format: int64
+            description: Identifiant de l'étudiant
+            example: 1
+          academicYearId:
+            type: integer
+            format: int64
+            description: Identifiant de la formation
+            example: 1
+        required:
+          - studentId
+          - academicYearId
+          - teachingUnitId
+          - status

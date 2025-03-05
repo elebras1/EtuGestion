@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 public class ResponsibleService {
 
     private final WebClient webClient;
-    private final String baseUrl = "http://localhost.com";  // URL de l'API des responsables
+    private String baseUrl = "http://jesaispas:8080";  // URL de l'API des responsables
 
     // Injection du WebClient via le constructeur
     public ResponsibleService(WebClient.Builder webClientBuilder) {
@@ -18,7 +18,7 @@ public class ResponsibleService {
     // 1. Récupérer tous les responsables
     public Mono<String> getAllManagers() {
         return webClient.get()
-                .uri("/api/managers")  // L'endpoint pour récupérer tous les responsables
+                .uri(baseUrl+"/managers")  // L'endpoint pour récupérer tous les responsables
                 .retrieve()
                 .bodyToMono(String.class)  // On convertit la réponse en chaîne de caractères (JSON ou autre format)
                 .switchIfEmpty(Mono.just("Liste des responsables est vide."));  // Valeur par défaut si la réponse est vide
@@ -27,7 +27,7 @@ public class ResponsibleService {
     // 2. Ajouter un nouveau responsable
     public Mono<String> addManager(String manager) {
         return webClient.post()
-                .uri("/api/managers")  // L'endpoint pour ajouter un responsable
+                .uri(baseUrl+"/managers")  // L'endpoint pour ajouter un responsable
                 .bodyValue(manager)  // Le corps de la requête (le responsable à ajouter)
                 .retrieve()
                 .bodyToMono(String.class)
@@ -37,7 +37,7 @@ public class ResponsibleService {
     // 3. Récupérer un responsable par ID
     public Mono<String> getManagerById(long id) {
         return webClient.get()
-                .uri("/api/managers/{id}", id)  // L'endpoint avec l'ID du responsable
+                .uri(baseUrl+"/managers/{id}", id)  // L'endpoint avec l'ID du responsable
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Responsable non trouvé."));
@@ -46,7 +46,7 @@ public class ResponsibleService {
     // 4. Mettre à jour un responsable
     public Mono<String> updateManager(long id, String manager) {
         return webClient.put()
-                .uri("/api/managers/{id}", id)  // L'endpoint avec l'ID du responsable
+                .uri(baseUrl+"/managers/{id}", id)  // L'endpoint avec l'ID du responsable
                 .bodyValue(manager)  // Le corps de la requête (les nouvelles informations du responsable)
                 .retrieve()
                 .bodyToMono(String.class)
@@ -56,7 +56,7 @@ public class ResponsibleService {
     // 5. Supprimer un responsable
     public Mono<String> deleteManager(long id) {
         return webClient.delete()
-                .uri("/api/managers/{id}", id)  // L'endpoint avec l'ID du responsable à supprimer
+                .uri(baseUrl+"/managers/{id}", id)  // L'endpoint avec l'ID du responsable à supprimer
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Erreur lors de la suppression du responsable."));

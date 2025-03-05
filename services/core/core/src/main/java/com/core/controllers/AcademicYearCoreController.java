@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+
 public class AcademicYearCoreController {
 
     private final AcademicYearApiService academicYearApiService;

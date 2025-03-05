@@ -1,0 +1,99 @@
+.
+├── application.properties
+├── build
+│   ├── classes
+│   │   └── java
+│   │       └── main
+│   │           ├── com
+│   │           │   └── core
+│   │           │       ├── Application.class
+│   │           │       ├── config
+│   │           │       │   └── WebClientConfig.class
+│   │           │       ├── controllers
+│   │           │       │   ├── AcademicYearCoreController.class
+│   │           │       │   ├── ApiController.class
+│   │           │       │   ├── AuthCoreController.class
+│   │           │       │   ├── CoreController.class
+│   │           │       │   ├── MessageCoreController.class
+│   │           │       │   ├── ResponsibleController.class
+│   │           │       │   └── StudentCoreController.class
+│   │           │       └── services
+│   │           │           ├── AcademicYearApiService.class
+│   │           │           ├── ApiService.class
+│   │           │           ├── AuthService.class
+│   │           │           ├── MessageService.class
+│   │           │           ├── ResponsibleService.class
+│   │           │           └── StudentService.class
+│   │           └── org
+│   │               └── example
+│   │                   └── Main.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       └── main
+│   │       └── headers
+│   │           └── java
+│   │               └── main
+│   ├── reports
+│   │   └── problems
+│   │       └── problems-report.html
+│   ├── resources
+│   │   └── main
+│   │       └── openapi.yaml
+│   └── tmp
+│       └── compileJava
+│           ├── compileTransaction
+│           │   ├── backup-dir
+│           │   └── stash-dir
+│           │       ├── AcademicYearApiService.class.uniqueId1
+│           │       ├── AcademicYearCoreController.class.uniqueId0
+│           │       └── CoreController.class.uniqueId2
+│           └── previous-compilation-data.bin
+├── build.gradle
+├── coretree
+├── docker-compose.yaml
+├── Dockerfile
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── README.md
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   ├── com
+    │   │   │   └── core
+    │   │   │       ├── Application.java
+    │   │   │       ├── config
+    │   │   │       │   └── WebClientConfig.java
+    │   │   │       ├── controllers
+    │   │   │       │   ├── AcademicYearCoreController.java
+    │   │   │       │   ├── ApiController.java
+    │   │   │       │   ├── AuthCoreController.java
+    │   │   │       │   ├── CoreController.java
+    │   │   │       │   ├── MessageCoreController.java
+    │   │   │       │   ├── ResponsibleController.java
+    │   │   │       │   └── StudentCoreController.java
+    │   │   │       └── services
+    │   │   │           ├── AcademicYearApiService.java
+    │   │   │           ├── ApiService.java
+    │   │   │           ├── AuthService.java
+    │   │   │           ├── MessageService.java
+    │   │   │           ├── ResponsibleService.java
+    │   │   │           └── StudentService.java
+    │   │   └── org
+    │   │       └── example
+    │   │           └── Main.java
+    │   └── resources
+    │       └── openapi.yaml
+    └── test
+        └── java
+            └── com
+                └── demo
+                    └── DemoApplicationTests.java
+
+46 directories, 51 files
