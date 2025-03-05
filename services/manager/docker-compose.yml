@@ -14,7 +14,7 @@ services:
     image: managers-api  
     container_name: manager-api
     ports:
-      - "8080:8080"  
+      - "8082:8080"
     environment:
       - MONGO_URI=mongodb://mongodb:27017/e22102349
     depends_on:

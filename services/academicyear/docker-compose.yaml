@@ -1,6 +1,7 @@
 ﻿services:
   mariadb:
     image: mariadb:latest
+    container_name: mariadb-academic-year
     environment:
       MYSQL_ROOT_PASSWORD: monMotDePasseSuperSecret
       MYSQL_DATABASE: test
@@ -8,6 +9,18 @@
       - mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  academic-year-api:
+    build: .
+    container_name: academic-year-api
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb-academic-year:3306/test
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=monMotDePasseSuperSecret
+    depends_on:
+      - mariadb
 
 volumes:
   mariadb_data:
