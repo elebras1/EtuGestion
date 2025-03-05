@@ -1,13 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-// URL de base pour les appels API
-const URL = 'http://localhost:8081'
+const URL = 'http://localhost:8080'
 
-// Déclaration des variables
 const academicYears = ref([])
 const selectedAcademicYear = ref(null)
+const managers = ref([])
 const newAcademicYear = ref({
     name: '',
     praticalWorkSize: 0,
@@ -23,11 +22,10 @@ const editAcademicYear = ref({
     responsibleId: undefined
 })
 
-// Pour gérer l'affichage des sections
 const showAddForm = ref(false)
 const showScraperInfo = ref(false)
 const showEditForm = ref(false)
-const errorMessage = ref('') // Message d'erreur
+const errorMessage = ref('')
 
 // Récupérer les formations depuis le serveur
 const fetchAcademicYears = async () => {
@@ -36,6 +34,17 @@ const fetchAcademicYears = async () => {
         academicYears.value = response.data
     } catch (error) {
         errorMessage.value = "Erreur lors de la récupération des formations : " + error.message
+        console.error(errorMessage.value)
+    }
+}
+
+// Récupérer la liste des managers
+const fetchManagers = async () => {
+    try {
+        const response = await axios.get(URL + '/managers')
+        managers.value = response.data
+    } catch (error) {
+        errorMessage.value = "Erreur lors de la récupération des managers : " + error.message
         console.error(errorMessage.value)
     }
 }
@@ -68,8 +77,7 @@ const toggleAddForm = () => {
 // Fonction pour démarrer le scraper
 const startScraper = () => {
     showScraperInfo.value = true
-    showAddForm.value = false // Masque la vue ajouter
-    // Logic for scraper can be added here
+    showAddForm.value = false
 }
 
 // Fonction pour afficher les formations
@@ -110,7 +118,6 @@ const addAcademicYear = async () => {
     }
 }
 
-
 // Fonction pour mettre à jour une formation
 const updateAcademicYear = async () => {
     try {
@@ -140,6 +147,19 @@ const deleteAcademicYear = async (id) => {
         console.error(errorMessage.value)
     }
 }
+
+// Fonction pour obtenir le nom complet d'un manager à partir de son ID
+const getManagerName = (managerId) => {
+    if (!managerId) return 'Aucun responsable';
+    const manager = managers.value.find(m => m.id === managerId);
+    return manager ? `${manager.prenom} ${manager.nom}` : `ID: ${managerId}`;
+}
+
+// Charger les managers dès l'initialisation du composant
+onMounted(() => {
+    fetchManagers();
+    fetchAcademicYears();
+})
 </script>
 
 <template>
@@ -176,8 +196,13 @@ const deleteAcademicYear = async (id) => {
                         type="number" required />
                 </div>
                 <div>
-                    <label for="responsibleId">ID Responsable :</label>
-                    <input v-model="newAcademicYear.responsibleId" id="responsibleId" type="number" />
+                    <label for="responsibleId">Responsable :</label>
+                    <select v-model="newAcademicYear.responsibleId" id="responsibleId">
+                        <option :value="undefined">Aucun responsable</option>
+                        <option v-for="manager in managers" :key="manager.id" :value="manager.id">
+                            {{ manager.prenom }} {{ manager.nom }} ({{ manager.email }})
+                        </option>
+                    </select>
                 </div>
                 <button type="submit">Ajouter</button>
             </form>
@@ -207,8 +232,13 @@ const deleteAcademicYear = async (id) => {
                         type="number" required />
                 </div>
                 <div>
-                    <label for="editResponsibleId">ID Responsable :</label>
-                    <input v-model="editAcademicYear.responsibleId" id="editResponsibleId" type="number" />
+                    <label for="editResponsibleId">Responsable :</label>
+                    <select v-model="editAcademicYear.responsibleId" id="editResponsibleId">
+                        <option :value="undefined">Aucun responsable</option>
+                        <option v-for="manager in managers" :key="manager.id" :value="manager.id">
+                            {{ manager.prenom }} {{ manager.nom }} ({{ manager.email }})
+                        </option>
+                    </select>
                 </div>
                 <button type="submit">Mettre à jour</button>
             </form>
@@ -223,8 +253,8 @@ const deleteAcademicYear = async (id) => {
                     <p><strong>Taille max TP :</strong> {{ year.praticalWorkSize }}</p>
                     <p><strong>Taille max TD :</strong> {{ year.directedWorkSize }}</p>
                     <p><strong>Nombre d'UE optionnel :</strong> {{ year.numberOptionalTeachingUnit }}</p>
-                    <p v-if="year.responsibleId !== undefined">
-                        <strong>ID Responsable :</strong> {{ year.responsibleId }}
+                    <p>
+                        <strong>Responsable :</strong> {{ getManagerName(year.responsibleId) }}
                     </p>
                     <button @click="getDetails(year.id)">Détails</button>
                     <button @click="toggleEditForm(year)">Modifier</button>
@@ -257,8 +287,8 @@ const deleteAcademicYear = async (id) => {
                                     <p><strong>Obligatoire :</strong> {{ unit.isRequired ? 'Oui' : 'Non' }}</p>
                                     <p><strong>Capacité :</strong> {{ unit.capacity }}</p>
                                     <p><strong>ID Formation :</strong> {{ unit.academicYearId }}</p>
-                                    <p v-if="unit.responsibleId !== undefined">
-                                        <strong>ID Responsable :</strong> {{ unit.responsibleId }}
+                                    <p>
+                                        <strong>Responsable :</strong> {{ getManagerName(unit.responsibleId) }}
                                     </p>
                                     <p>
                                         <strong>IDs étudiants :</strong>
@@ -305,5 +335,11 @@ button {
     color: red;
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
 }
 </style>
