@@ -1,4 +1,5 @@
 <script setup>
+import AcademicYear from './components/AcademicYear.vue';
 import HelloWorld from './components/HelloWorld.vue'
 import Manager from './components/Manager.vue'
 import TheWelcome from './components/TheWelcome.vue'
@@ -14,7 +15,8 @@ import TheWelcome from './components/TheWelcome.vue'
   </header>
 
   <main>
-  <Manager />
+    <Manager />
+    <AcademicYear />
   </main>
 </template>
 
