@@ -11,7 +11,7 @@ const setView = (view) => {
 <template>
     <nav class="navbar">
         <button @click="setView('manager')">Manager</button>
-        <button @click="setView('academicYear')">Academic Year</button>
+        <button @click="setView('academicYear')">Formation</button>
     </nav>
 </template>
 
