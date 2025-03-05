@@ -137,14 +137,12 @@ public class ManagerServletMongo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String nom = request.getParameter("nom");
-		String prenom = request.getParameter("prenom");
-		String email = request.getParameter("email");
+		ObjectMapper objectMap = new ObjectMapper();
+		Manager manager = objectMap.readValue(request.getReader(), Manager.class);
+		manager.setId(maxId);
 
 		// Id incrémenté pour la création d'un nouveau responsable
 		maxId++;
-
-		Manager manager = new Manager(maxId, nom, prenom, email);
 
 		try {
 			if (manager.getId() <= 0 || manager.getEmail() == null || manager.getNom() == null
@@ -177,26 +175,25 @@ public class ManagerServletMongo extends HttpServlet {
 			pathInfo = pathInfo.substring(1);
 		}
 
-		String nom = request.getParameter("nom");
-		String prenom = request.getParameter("prenom");
-		String email = request.getParameter("email");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Manager manager = objectMapper.readValue(request.getReader(), Manager.class);
 
 		if (pathInfo != null && !pathInfo.isEmpty()) {
-			
+
 			try {
 				long id = Integer.parseInt(pathInfo);
 
 				// document qui permet de stocker les données à modifier
 				Document update = new Document();
 
-				if (nom != null) {
-					update.append("nom", nom);
+				if (manager.getNom() != null) {
+					update.append("nom", manager.getNom());
 				}
-				if (prenom != null) {
-					update.append("prenom", prenom);
+				if (manager.getPrenom() != null) {
+					update.append("prenom", manager.getPrenom());
 				}
-				if (email != null) {
-					update.append("email", email);
+				if (manager.getEmail() != null) {
+					update.append("email", manager.getEmail());
 				}
 
 				if (!update.isEmpty()) {
