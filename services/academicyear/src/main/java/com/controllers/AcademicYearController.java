@@ -27,6 +27,11 @@ public class AcademicYearController {
         return this.academicYearService.saveAcademicYear(academicYearDto);
     }
 
+    @PostMapping("/scraper")
+    public void saveAcademicYearFromScraper() {
+        this.academicYearService.saveAcademicYearFromScraper("http://localhost:9090/scraper");
+    }
+
     @PutMapping("/{id}")
     public AcademicYearDto updateAcademicYear(@PathVariable Long id, @RequestBody AcademicYearDto academicYearDto){
         academicYearDto.setId(id);

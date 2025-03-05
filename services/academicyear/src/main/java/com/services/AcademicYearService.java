@@ -5,6 +5,7 @@ import com.dtos.GroupDto;
 import com.dtos.RequestDto;
 import com.dtos.TeachingUnitDto;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface AcademicYearService {
 
     boolean acceptStudentToAcademicYear(Long academicYearId, Long studentId);
     boolean rejectStudentToAcademicYear(Long academicYearId, Long studentId);
+
+    void saveAcademicYearFromScraper(String url);
 }

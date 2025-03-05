@@ -16,6 +16,7 @@ import com.services.RequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +31,16 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     private final RequestService requestService;
     private final GroupRepository groupRepository;
 
-    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository) {
+    private final RestTemplate restTemplate;
+
+    public AcademicYearServiceImpl(AcademicYearRepository academicYearRepository, AcademicYearMapper academicYearMapper, GroupMapper groupMapper, TeachingUnitMapper teachingUnitMapper, RequestService requestService, GroupRepository groupRepository, RestTemplate restTemplate) {
         this.academicYearRepository = academicYearRepository;
         this.academicYearMapper = academicYearMapper;
         this.groupMapper = groupMapper;
         this.teachingUnitMapper = teachingUnitMapper;
         this.requestService = requestService;
         this.groupRepository = groupRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -170,5 +174,9 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public boolean rejectStudentToAcademicYear(Long academicYearId, Long studentId) {
         return this.requestService.deleteRequest(academicYearId, studentId);
+    }
+
+    @Override
+    public void saveAcademicYearFromScraper(String url) {
     }
 }
