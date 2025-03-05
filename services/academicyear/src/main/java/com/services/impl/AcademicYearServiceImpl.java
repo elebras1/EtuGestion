@@ -14,14 +14,19 @@ import com.services.AcademicYearService;
 import com.services.RequestService;
 import com.services.TeachingUnitService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @Service("academicYear")
 @Transactional
@@ -58,7 +63,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public AcademicYearDto updateAcademicYear(AcademicYearDto academicYearDto) {
         AcademicYear academicYear = this.academicYearRepository.findById(academicYearDto.getId()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
+                new EntityNotFoundException("Academic year not found"));
 
         if (academicYearDto.getName() != null) {
             academicYear.setName(academicYearDto.getName());
@@ -83,7 +88,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
     @Override
     public AcademicYearDto getAcademicYearById(Long academicYearId) {
         AcademicYear academicYear = this.academicYearRepository.findById(academicYearId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Academic year not found"));
+                new EntityNotFoundException("Academic year not found"));
         return this.academicYearMapper.toDto(academicYear);
     }
 
@@ -182,20 +187,56 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 
     @Override
     public void saveAcademicYearFromScraper(String url) {
-        String data = this.restTemplate.getForObject(url, String.class);
-        System.out.println(data);
-        String[] jsonStrings = data.split("-----");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        CompletableFuture<HttpResponse<Stream<String>>> futureResponse =
+                client.sendAsync(request, HttpResponse.BodyHandlers.ofLines());
+
+        futureResponse.thenAccept(response -> {
+            StringBuilder jsonBuffer = new StringBuilder();
+
+            response.body().forEach(line -> {
+                jsonBuffer.append(line).append("\n");
+                if (line.contains("-----")) {
+                    processJsonPacket(jsonBuffer.toString());
+                    jsonBuffer.setLength(0);
+                }
+            });
+            if (jsonBuffer.length() > 0) {
+                processJsonPacket(jsonBuffer.toString());
+            }
+
+            System.out.println("Fin du scraping en streaming.");
+        }).exceptionally(e -> {
+            System.out.println("Erreur lors de la connexion : " + e.getMessage());
+            return null;
+        });
+        futureResponse.join();
+    }
+
+    private void processJsonPacket(String jsonPacket) {
+        String[] jsonStrings = jsonPacket.split("-----");
         for (String jsonString : jsonStrings) {
-            try {
-                ScraperAcademicYearDto scraperDto = this.objectMapper.readValue(jsonString, ScraperAcademicYearDto.class);
-                this.saveScraperAcademicYearDto(scraperDto);
-            } catch (Exception e) {
-                System.out.println("Erreur lors de la conversion du JSON : " + e.getMessage());
+            if (!jsonString.trim().isEmpty()) {
+                processJson(jsonString);
             }
         }
     }
 
-    public void saveScraperAcademicYearDto(ScraperAcademicYearDto scraperDto) {
+    private void processJson(String jsonString) {
+        try {
+            ScraperAcademicYearDto scraperDto = objectMapper.readValue(jsonString, ScraperAcademicYearDto.class);
+            saveScraperAcademicYearDto(scraperDto);
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la conversion du JSON : " + e.getMessage());
+        }
+    }
+
+    private void saveScraperAcademicYearDto(ScraperAcademicYearDto scraperDto) {
         try {
             AcademicYearDto academicYearDto = new AcademicYearDto();
             academicYearDto.setName(scraperDto.getName());
@@ -203,6 +244,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
             academicYearDto.setDirectedWorkSize(scraperDto.getTdSize());
             academicYearDto.setNumberOptionalTeachingUnit(scraperDto.getOptionsNumber());
             academicYearDto = this.saveAcademicYear(academicYearDto);
+
             for (ScraperTeachingUnitDto scraperTeachingUnitDto : scraperDto.getTeachingUnits()) {
                 TeachingUnitDto teachingUnitDto = new TeachingUnitDto();
                 teachingUnitDto.setName(scraperTeachingUnitDto.getName());
