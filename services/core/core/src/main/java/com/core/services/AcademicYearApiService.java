@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 public class AcademicYearApiService {
 
     private final WebClient webClient;
-    private String baseUrl = "http://localhost:8081";
+    private String baseUrl = "http://localhost:8080";
 
     public AcademicYearApiService(WebClient webClient) {
         this.webClient = webClient;
