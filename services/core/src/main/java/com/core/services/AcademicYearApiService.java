@@ -66,25 +66,25 @@ public class AcademicYearApiService {
                 .switchIfEmpty(Mono.just("Aucun étudiant trouvé pour la formation ID: " + id));
     }
 
-    public Mono<String> registerStudentInAcademicYear(int id, String numEtudiant) {
+    public Mono<String> registerStudentInAcademicYear(int id, int studentId) {
         return webClient.post()
-                .uri(baseUrl + "/academicyears/{id}/register/{numEtudiant}", id, numEtudiant)
+                .uri(baseUrl + "/academicyears/{id}/register/{studentId}", id, studentId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Étudiant inscrit dans la formation ID " + id));
     }
 
-    public Mono<String> acceptStudentInAcademicYear(int id, String numEtudiant) {
+    public Mono<String> acceptStudentInAcademicYear(int id, int studentId) {
         return webClient.post()
-                .uri(baseUrl + "/academicyears/{id}/accept/{numEtudiant}", id, numEtudiant)
+                .uri(baseUrl + "/academicyears/{id}/accept/{studentId}", id, studentId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Étudiant accepté dans la formation ID " + id));
     }
 
-    public Mono<String> rejectStudentInAcademicYear(int id, String numEtudiant) {
+    public Mono<String> rejectStudentInAcademicYear(int id, int studentId) {
         return webClient.post()
-                .uri(baseUrl + "/academicyears/{id}/reject/{numEtudiant}", id, numEtudiant)
+                .uri(baseUrl + "/academicyears/{id}/reject/{studentId}", id, studentId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Étudiant rejeté dans la formation ID " + id));
@@ -195,17 +195,17 @@ public class AcademicYearApiService {
     }
 
     // **Méthodes pour gérer l'inscription et désinscription dans les unités d'enseignement**
-    public Mono<String> registerStudentInTeachingUnit(int id, String numEtudiant) {
+    public Mono<String> registerStudentInTeachingUnit(int id, int studentId) {
         return webClient.post()
-                .uri(baseUrl + "/teachingunits/{id}/register/{numEtudiant}", id, numEtudiant)
+                .uri(baseUrl + "/teachingunits/{id}/register/{studentId}", id, studentId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Étudiant inscrit dans l'unité d'enseignement ID " + id));
     }
 
-    public Mono<String> unregisterStudentFromTeachingUnit(int id, String numEtudiant) {
+    public Mono<String> unregisterStudentFromTeachingUnit(int id, int studentId) {
         return webClient.post()
-                .uri(baseUrl + "/teachingunits/{id}/unregister/{numEtudiant}", id, numEtudiant)
+                .uri(baseUrl + "/teachingunits/{id}/unregister/{studentId}", id, studentId)
                 .retrieve()
                 .bodyToMono(String.class)
                 .switchIfEmpty(Mono.just("Étudiant désinscrit de l'unité d'enseignement ID " + id));
