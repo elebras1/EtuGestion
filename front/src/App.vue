@@ -5,6 +5,7 @@ import Manager from './components/Manager.vue';
 import Navbar from './components/Navbar.vue';
 import Request from './components/Request.vue';
 import TeachingUnit from './components/TeachingUnit.vue';
+import Group from './components/Group.vue';
 
 const currentView = ref('manager');
 </script>
@@ -18,6 +19,7 @@ const currentView = ref('manager');
     <Manager v-if="currentView === 'manager'" />
     <AcademicYear v-if="currentView === 'academicYear'" />
     <TeachingUnit v-if="currentView === 'teachingUnit'" />
+    <Group v-if="currentView === 'group'" />
     <Request v-if="currentView === 'request'" />
   </main>
 </template>

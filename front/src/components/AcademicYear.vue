@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-const URL = 'http://localhost:8080'
+const URL = 'http://localhost:8081'
 
 const academicYears = ref([])
 const selectedAcademicYear = ref(null)
