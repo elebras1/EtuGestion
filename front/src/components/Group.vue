@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8081'; // Remplace avec l'URL de ton API
+const API_URL = 'http://localhost:8081';
 
 export default {
     data() {
@@ -58,7 +58,12 @@ export default {
         // Créer un groupe
         createGroup() {
             this.isCreating = true;
-            this.groupData = { name: "", academicYearId: null };
+            this.groupData = {
+                name: "",
+                academicYearId: null,
+                studentsIds: [],
+                studentsIdsString: ""
+            };
         },
 
         // Modifier un groupe
@@ -67,14 +72,27 @@ export default {
             try {
                 const response = await axios.get(`${API_URL}/groups/${id}`);
                 this.groupData = response.data;
+                // Convertir le tableau en chaîne pour préremplir le champ
+                this.groupData.studentsIdsString = this.groupData.studentsIds ? this.groupData.studentsIds.join(', ') : "";
                 this.isEditing = true;
             } catch (error) {
                 console.error('Groupe non trouvé', error);
             }
         },
 
+
         // Soumettre le formulaire de création ou de modification
         async handleSubmit() {
+            // Conversion de la chaîne en tableau d'entiers
+            if (this.groupData.studentsIdsString) {
+                this.groupData.studentsIds = this.groupData.studentsIdsString
+                    .split(',')
+                    .map(id => parseInt(id.trim()))
+                    .filter(id => !isNaN(id));
+            } else {
+                this.groupData.studentsIds = [];
+            }
+
             if (this.isEditing) {
                 await this.updateGroup(this.currentGroupId);
             } else if (this.isCreating) {
@@ -82,12 +100,13 @@ export default {
             }
         },
 
+
         // Créer un nouveau groupe
         async createNewGroup() {
             try {
                 const response = await axios.post(`${API_URL}/groups`, this.groupData);
-                if (response.status === 201) {
-                    this.fetchGroups();
+                if (response.status === 200 || response.status === 201) {
+                    await this.fetchGroups();
                     this.isCreating = false;
                 } else {
                     console.error('Erreur de création du groupe');
@@ -96,6 +115,7 @@ export default {
                 console.error('Erreur de connexion', error);
             }
         },
+
 
         // Mettre à jour un groupe existant
         async updateGroup(id) {
@@ -130,7 +150,12 @@ export default {
         cancelAction() {
             this.isCreating = false;
             this.isEditing = false;
-            this.groupData = { name: "", academicYearId: null };
+            this.groupData = {
+                name: "",
+                academicYearId: null,
+                studentsIds: [],
+                studentsIdsString: ""
+            };
         },
 
         // Retourner à la liste des groupes
