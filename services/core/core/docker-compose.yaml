@@ -12,6 +12,17 @@
     networks:
       - core_mynetwork
 
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=monMotDePasseSuperSecret
+      - MYSQL_DATABASE=test
+    ports:
+      - "3306:3306"
+
   core-api:
     image: openjdk:17-jdk-slim
     container_name: core-api
@@ -39,6 +50,7 @@
 
 volumes:
   mongodb-data:
+  mariadb-data:
 
 networks:
   core_mynetwork:

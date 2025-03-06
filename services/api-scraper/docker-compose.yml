@@ -1,0 +1,20 @@
+services:
+  api-scraper:
+    build: .
+    container_name: api-scraper
+    ports:
+      - "9090:9090"
+    volumes:
+      - .:/api-scraper
+    environment:
+      - JAVA_HOME=/usr/local/jdk-21
+      - PATH=$JAVA_HOME/bin:$PATH
+      - MAVEN_HOME=/usr/share/maven
+      - PATH=$MAVEN_HOME/bin:$PATH
+
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge

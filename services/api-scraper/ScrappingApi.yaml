@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: API de Scraping des Formations
+  description: |
+    Cette API REST permet de récupérer des données de formations depuis un site externe et de les envoyer à une autre API pour stockage.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:9090/api
+    description: Serveur local pour le scraper
+
+tags:
+  - name: scrapper
+    description: Opérations liées au scraping des formations
+
+paths:
+  /scrapper:
+    get:
+      tags:
+        - scrapper
+      summary: Scraper les formations pour une année donnée
+      description: Récupère les formations depuis `https://formations.univ-brest.fr` et les envoie à une API de stockage.
+      operationId: scrapeFormations
+      responses:
+        '200':
+          description: Formations récupérées et envoyées avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+
+                  Formations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Formation'
+                    description: Liste des formations récupérées
+        '500':
+          description: Erreur interne du serveur lors du scraping ou de l'envoi des données
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Erreur lors du scraping ou de l'envoi des données. Veuillez réessayer plus tard."
+
+components:
+  schemas:
+    Formation:
+      type: object
+      description: Représentation d'une formation récupérée par le scraper
+      properties:
+        name:
+          type: string
+          description: Nom de la formation
+          example: "Master Informatique"
+        tpSize:
+          type: integer
+          description: Taille du groupe de travaux pratiques
+          example: 25
+          default: 15
+        tdSize:
+          type: integer
+          description: Taille du groupe de travaux dirigés
+          example: 30
+          default: 30
+        OptionsNumber:
+          type: integer
+          description: Nombre d'UE optionnelles
+          example: 2
+          default: 0
+        UES:
+          type: array
+          description: Liste des unités d'enseignement obligatoires
+          items:
+            $ref: '#/components/schemas/Ue'
+      required:
+        - name
+        - tpSize
+        - tdSize
+        - ues
+
+    Ue:
+      type: object
+      description: Représentation d'une unité d'enseignement (UE)
+      properties:
+        name:
+          type: string
+          description: Nom de l'unité d'enseignement
+          example: "Programmation avancée"
+        ECTS:
+          type: integer
+          description: Nombre de crédits
+          example: 30
+        Hours:
+          type: integer
+          description: Nombre d'heures
+          example: 25
+        capacity:
+          type: integer
+          description: Capacité maximale de l'unité d'enseignement
+          example: 50
+          default: 120
+        isMandatory:
+          type: boolean
+          description: Indique si l'unité d'enseignement est obligatoire ou non
+          example: true
+      required:
+        - name
+        - capacity
+        - isMandatory
