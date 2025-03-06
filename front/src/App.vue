@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import AcademicYear from './components/AcademicYear.vue';
 import Manager from './components/Manager.vue';
 import Navbar from './components/Navbar.vue';
+import Request from './components/Request.vue';
+import TeachingUnit from './components/TeachingUnit.vue';
 
 const currentView = ref('manager');
 </script>
@@ -15,6 +17,8 @@ const currentView = ref('manager');
   <main>
     <Manager v-if="currentView === 'manager'" />
     <AcademicYear v-if="currentView === 'academicYear'" />
+    <TeachingUnit v-if="currentView === 'teachingUnit'" />
+    <Request v-if="currentView === 'request'" />
   </main>
 </template>
 

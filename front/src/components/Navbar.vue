@@ -12,6 +12,8 @@ const setView = (view) => {
     <nav class="navbar">
         <button @click="setView('manager')">Manager</button>
         <button @click="setView('academicYear')">Formation</button>
+        <button @click="setView('teachingUnit')">UE</button>
+        <button @click="setView('request')">Demande</button>
     </nav>
 </template>
 
