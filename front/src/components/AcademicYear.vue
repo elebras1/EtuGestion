@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const URL = 'http://localhost:8081'
+const URLmanager = 'http://localhost:8080'
 
 const academicYears = ref([])
 const selectedAcademicYear = ref(null)
@@ -41,7 +42,7 @@ const fetchAcademicYears = async () => {
 // Récupérer la liste des managers
 const fetchManagers = async () => {
     try {
-        const response = await axios.get(URL + '/managers')
+        const response = await axios.get(URLmanager + '/managers')
         managers.value = response.data
     } catch (error) {
         errorMessage.value = "Erreur lors de la récupération des managers : " + error.message

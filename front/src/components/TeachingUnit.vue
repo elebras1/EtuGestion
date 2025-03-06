@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8081';
+const URLmanager = 'http://localhost:8080';
 
 export default {
     data() {
@@ -51,7 +52,7 @@ export default {
         // Récupère les responsables
         async fetchManagers() {
             try {
-                const response = await axios.get(`${API_URL}/managers`);
+                const response = await axios.get(`${URLmanager}/managers`);
                 this.managers = response.data;
             } catch (error) {
                 console.error('Erreur lors de la récupération des responsables :', error);
