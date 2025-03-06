@@ -76,10 +76,18 @@ const toggleAddForm = () => {
 }
 
 // Fonction pour démarrer le scraper
-const startScraper = () => {
-    showScraperInfo.value = true
-    showAddForm.value = false
+const startScraper = async () => {
+    try {
+        await axios.post(URL + '/academicyears/scraper')
+        await fetchAcademicYears()
+        showScraperInfo.value = true
+        showAddForm.value = false
+    } catch (error) {
+        errorMessage.value = "Erreur lors du démarrage du scraper : " + error.message
+        console.error(errorMessage.value)
+    }
 }
+
 
 // Fonction pour afficher les formations
 const showAcademicYears = () => {
