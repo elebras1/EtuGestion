@@ -53,6 +53,7 @@ export default {
         async fetchManagers() {
             try {
                 const response = await axios.get(`${URLmanager}/managers`);
+                console.log(response.data);
                 this.managers = response.data;
             } catch (error) {
                 console.error('Erreur lors de la récupération des responsables :', error);
@@ -170,7 +171,7 @@ export default {
                         @change="updateTeachingUnitField('responsibleId', $event.target.value)">
                         <option value="" disabled>Choisir un responsable</option>
                         <option v-for="manager in managers" :key="manager.id" :value="manager.id">
-                            {{ manager.name }}
+                            {{ manager.prenom }} {{ manager.nom }}
                         </option>
                     </select>
                 </div>
@@ -199,7 +200,7 @@ export default {
                     <td>{{ unit.isRequired ? 'Oui' : 'Non' }}</td>
                     <td>{{ unit.capacity }}</td>
                     <td>{{academicYears.find(y => y.id === unit.academicYearId)?.name}}</td>
-                    <td>{{managers.find(manager => manager.id === unit.responsibleId)?.name || 'Non assigné'}}</td>
+                    <td>{{managers.find(manager => manager.id === unit.responsibleId)?.email || 'Non assigné'}}</td>
                     <td>{{ unit.studentsIds?.join(', ') || '-' }}</td>
                     <td>
                         <button @click="showForm = true; editingTeachingUnit = { ...unit }">Éditer</button>
