@@ -61,7 +61,7 @@ public class AcademicYearCoreController {
 
     @PostMapping("/academicyears/{id}/accept/{studentId}")
     public Mono<String> acceptStudentInAcademicYear(@PathVariable int id, @PathVariable int studentId) {
-        return studentService.getAllStudents().doOnTerminate(() -> {
+        return this.academicYearApiService.acceptStudentInAcademicYear(id, studentId).doOnTerminate(() -> {
             // Créer et envoyer le message une fois l'acceptation terminée
             String messageText = "Votre inscription dans la formation a été acceptée. "
                     + "Veuillez maintenant choisir vos options pour la prochaine étape.";
