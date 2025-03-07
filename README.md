@@ -75,7 +75,13 @@ relations:
   - requests(academicYearId) N:1 -> academic_years(id)
 
 
-## Manager
+## Manager (Servlet - MongoDB)
 Description...
-BDD...
+
+### Bade de données
+manager(id, nom, prenom, email)
+  - id: Long
+  - nom: String
+  - prenom: String
+  - email: String
 
