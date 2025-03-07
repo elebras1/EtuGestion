@@ -156,6 +156,7 @@ public class ManagerServletMongo extends HttpServlet {
 
 			response.setStatus(HttpServletResponse.SC_CREATED);
 			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write("{\"description\":\"Responsable créé avec succès\"}");
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -203,10 +204,12 @@ public class ManagerServletMongo extends HttpServlet {
 					if (modif > 0) {
 						response.setStatus(HttpServletResponse.SC_OK);
 						response.setContentType("application/json");
+						response.setCharacterEncoding("UTF-8");
 						response.getWriter().write("{\"description\":\"La responsable a été mis à jour avec succès.\"}");
 					} else {
 						response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 						response.setContentType("application/json");
+						response.setCharacterEncoding("UTF-8");
 						response.getWriter()
 								.write("{\"description\":\"Responsable non trouvé ou aucune modification apportée.\"}");
 					}
@@ -214,6 +217,7 @@ public class ManagerServletMongo extends HttpServlet {
 			} catch (NumberFormatException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write("{\"description\":\"L'id n'est pas valide.\"}");
 			}
 		}
@@ -240,15 +244,18 @@ public class ManagerServletMongo extends HttpServlet {
 				if (delete > 0) {
 					response.setStatus(HttpServletResponse.SC_OK);
 					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{\"description\":\"Responsable supprimé avec succès.\"}");
 				} else {
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 					response.setContentType("application/json");
+					response.setCharacterEncoding("UTF-8");
 					response.getWriter().write("{\"description\":\"Responsable non trouvé.\"}");
 				}
 			} catch (NumberFormatException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write("{\"description\":\"L'id n'est pas valide, doit être un entier.\"}");
 			}
 		}

@@ -77,11 +77,34 @@ relations:
 
 ## Manager (Servlet - MongoDB)
 Ce micro-service permet la gestion des responsables. Cela inclut la création et la gestion de leurs informations personnelles (CRUD).
+### Description :
+Tout d'abord un responsable est possède plusieurs informations : 
+- Email
+- Prénom
+- Nom
+#### Managers-api est une api de responsable qui gère :
+- La récupération de tout les responsables dans la base de données.
+- La récupération d'un seule responsable.
+- La création d'un responsable.
+- La suppresion d'un responsable.
+- La mise à jour des données d'un responsable.
 
-### Bade de données
+### Base de données
 manager(id, nom, prenom, email)
   - id: Long
   - nom: String
   - prenom: String
   - email: String
 
+#### MongoDB :
+Celle-ci est constitué comme suit :
+Database :
+```
+e22102349
+```
+Collections dans la database :
+```
+Manager
+```
+#### Illustration de l'api responsable et de la base MongoDB sous Docker :
+<img src="img_readme/docker_manager-api_mongodb.png" alt="Texte alternatif" width="640" height="293">
