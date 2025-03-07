@@ -97,7 +97,7 @@ manager(id, nom, prenom, email)
   - email: String
 
 #### MongoDB :
-Celle-ci est constitué comme suit :
+Celle-ci est constitué comme suit :  
 Database :
 ```
 e22102349
