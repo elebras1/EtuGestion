@@ -35,9 +35,45 @@ Création de compte suite à la création d'un étudiant
 Création de message suite à la création d'un étudiant et à sa validation dans une formation  
 
 
-## AcademicYear
+## AcademicYear (Spring Boot - MariaDB)
 Description...
-BDD...
+### Bade de données
+academic_years(id, name, praticalWorkSize, directedWorkSize, numberOptionalTeachingUnit, responsibleId)
+  - id: Long
+  - name: String
+  - praticalWorkSize: Short
+  - directedWorkSize: Short
+  - numberOptionalTeachingUnit: Short
+  - responsibleId: Long
+
+groups(id, name, academic_year_id, studentsIds)
+  - id: Long
+  - name: String
+  - academic_year_id: Long (FK)
+  - studentsIds: List<Long>
+
+requests(id, studentId, academicYearId)
+  - id: Long
+  - studentId: Long
+  - academicYearId: Long (FK)
+
+teaching_units(id, name, isRequired, capacity, academic_year_id, responsibleId, studentsIds)
+  - id: Long
+  - name: String
+  - isRequired: Boolean
+  - capacity: Short
+  - academic_year_id: Long (FK)
+  - responsibleId: Long
+  - studentsIds: List<Long>
+
+relations:
+  - academic_years(id) 1:N -> groups(academic_year_id)
+  - academic_years(id) 1:N -> teaching_units(academic_year_id)
+  - groups(id) N:1 -> academic_years(id)
+  - teaching_units(id) N:1 -> academic_years(id)
+  - requests(studentId) N:1 -> users(id) (Assumption: User entity exists)
+  - requests(academicYearId) N:1 -> academic_years(id)
+
 
 ## Manager
 Description...
