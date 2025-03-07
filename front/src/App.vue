@@ -4,7 +4,7 @@ import AcademicYear from './components/AcademicYear.vue';
 import Manager from './components/Manager.vue';
 import Navbar from './components/Navbar.vue';
 import RequestManager from './components/request/RequestManager.vue';
-import TeachingUnit from './components/TeachingUnit.vue';
+import TeachingUnitManager from './components/teachingunit/TeachingUnitManager.vue';
 import GroupManager from './components/group/GroupManager.vue';
 
 const currentView = ref('manager');
@@ -18,7 +18,7 @@ const currentView = ref('manager');
   <main>
     <Manager v-if="currentView === 'manager'" />
     <AcademicYear v-if="currentView === 'academicYear'" />
-    <TeachingUnit v-if="currentView === 'teachingUnit'" />
+    <TeachingUnitManager v-if="currentView === 'teachingUnit'" />
     <GroupManager v-if="currentView === 'group'" />
     <RequestManager v-if="currentView === 'request'" />
   </main>
