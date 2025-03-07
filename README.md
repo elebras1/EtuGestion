@@ -76,7 +76,7 @@ relations:
 
 
 ## Manager (Servlet - MongoDB)
-Description...
+Ce micro-service permet la gestion des responsables. Cela inclut la création et la gestion de leurs informations personnelles (CRUD).
 
 ### Bade de données
 manager(id, nom, prenom, email)
