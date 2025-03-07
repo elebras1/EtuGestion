@@ -108,3 +108,8 @@ Manager
 ```
 #### Illustration de l'api responsable et de la base MongoDB sous Docker :
 <img src="img_readme/docker_manager-api_mongodb.png" alt="Texte alternatif" width="640" height="293">
+
+## Auteurs
+MILLET Sully
+LE BRAS Erwan
+NUNEZ GUAJARDO Christian Esteban
