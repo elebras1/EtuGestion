@@ -156,25 +156,70 @@ public class AcademicYearServiceImpl implements AcademicYearService {
             return false;
         }
 
-        Group groupMin = null;
-        int minSize = Integer.MAX_VALUE;
-
-        for (Group group : academicYear.getGroups()) {
-            int groupSize = group.getStudentsIds().size();
-            if (groupSize < minSize) {
-                minSize = groupSize;
-                groupMin = group;
-            }
-        }
-
-        if (groupMin == null) {
+        Group tpGroup = findSmallestGroupWithCapacity(academicYear.getGroups(), "TP", academicYear.getPraticalWorkSize());
+        if (tpGroup == null) {
             return false;
         }
 
-        groupMin.getStudentsIds().add(studentId);
-        this.groupRepository.save(groupMin);
+        Group tdGroup = findSmallestGroupWithCapacity(academicYear.getGroups(), "TD", academicYear.getDirectedWorkSize());
+        if (tdGroup == null) {
+            return false;
+        }
+
+        tpGroup.getStudentsIds().add(studentId);
+        tdGroup.getStudentsIds().add(studentId);
+
+        this.groupRepository.save(tpGroup);
+        this.groupRepository.save(tdGroup);
+
+        boolean allRequiredUnitsHaveSpace = addStudentToRequiredTeachingUnits(academicYear.getTeachingUnits(), studentId);
+        if (!allRequiredUnitsHaveSpace) {
+            tpGroup.getStudentsIds().remove(studentId);
+            tdGroup.getStudentsIds().remove(studentId);
+            this.groupRepository.save(tpGroup);
+            this.groupRepository.save(tdGroup);
+            return false;
+        }
 
         return this.requestService.deleteRequest(academicYearId, studentId);
+    }
+
+    private Group findSmallestGroupWithCapacity(List<Group> groups, String groupType, Short maxCapacity) {
+        Group smallestGroup = null;
+        int minSize = Integer.MAX_VALUE;
+
+        for (Group group : groups) {
+            if (group.getType().equalsIgnoreCase(groupType)) {
+                int groupSize = group.getStudentsIds().size();
+
+                if (groupSize < maxCapacity && groupSize < minSize) {
+                    minSize = groupSize;
+                    smallestGroup = group;
+                }
+            }
+        }
+
+        return smallestGroup;
+    }
+
+    private boolean addStudentToRequiredTeachingUnits(List<TeachingUnit> teachingUnits, Long studentId) {
+        for (TeachingUnit unit : teachingUnits) {
+            if (Boolean.TRUE.equals(unit.getIsRequired())) {
+                int currentSize = unit.getStudentsIds().size();
+                if (currentSize >= unit.getCapacity()) {
+                    return false;
+                }
+            }
+        }
+
+        for (TeachingUnit unit : teachingUnits) {
+            if (Boolean.TRUE.equals(unit.getIsRequired())) {
+                unit.getStudentsIds().add(studentId);
+                teachingUnitService.updateTeachingUnit(teachingUnitMapper.toDto(unit));
+            }
+        }
+
+        return true;
     }
 
     @Override

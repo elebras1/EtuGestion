@@ -41,12 +41,11 @@ Cela inclut une gestion CRUD des formations, des groupes, des unités d'enseigne
 
 ### Fonctionnalités spécifiques
 #### Inscription à un groupe
-Lorsqu'un étudiant fait une demande d'inscription, elle est enregistrée dans la table des demandes. Il est possible de l'accepter ou de la refuser. Lorsqu'elle est acceptée, l'étudiant est ajouté dans deux groupes de TD et de TP contenant le moins d'étudiants. Si aucun groupe n'a de place disponible, l'étudiant n'est pas ajouté.  
+Lorsqu'un étudiant fait une demande d'inscription, elle est enregistrée dans la table des demandes. Il est possible de l'accepter ou de la refuser. Lorsqu'elle est acceptée, l'étudiant est ajouté dans deux groupes de TD et de TP contenant le moins d'étudiants. Si aucun groupe n'a de place disponible, l'étudiant n'est pas ajouté.
 Amélioration possible : création automatique d'un nouveau groupe avec équilibrage.
 
 #### Inscription à une unité d'enseignement
-Lors de l'ajout d'une unité d'enseignement, si elle est obligatoire, tous les étudiants présents dans la formation sont ajoutés. Lors de l'inscription à une UE optionnelle, avant d'ajouter l'étudiant, on vérifie que l'unité d'enseignement n'est pas pleine.
-
+Lors de l'ajout d'une unité d'enseignement, si elle est obligatoire, tous les étudiants présents dans la formation sont ajoutés. Lors de l'inscription à une UE optionnelle, avant d'ajouter l'étudiant, on vérifie que l'unité d'enseignement n'est pas pleine
 ### Base de données
 academic_years(id, name, praticalWorkSize, directedWorkSize, numberOptionalTeachingUnit, responsibleId)
   - id: Long
@@ -118,3 +117,8 @@ Manager
 ```
 #### Illustration de l'api responsable et de la base MongoDB sous Docker :
 <img src="img_readme/docker_manager-api_mongodb.png" alt="Texte alternatif" width="640" height="293">
+
+## Auteurs
+MILLET Sully
+LE BRAS Erwan
+NUNEZ GUAJARDO Christian Esteban

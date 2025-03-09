@@ -9,6 +9,7 @@ public class GroupDto {
 
     private Long id;
     private String name;
+    private String type;
     private Long academicYearId;
     private List<Long> studentsIds;
 }

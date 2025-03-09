@@ -14,6 +14,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String type;
     @ManyToOne
     @JoinColumn(name = "academic_year_id")
     private AcademicYear academicYear;

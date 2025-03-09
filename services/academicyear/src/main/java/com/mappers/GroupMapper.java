@@ -18,6 +18,7 @@ public class GroupMapper {
         GroupDto groupDto = new GroupDto();
         groupDto.setId(group.getId());
         groupDto.setName(group.getName());
+        groupDto.setType(group.getType());
         groupDto.setStudentsIds(group.getStudentsIds());
         groupDto.setAcademicYearId(group.getAcademicYear() != null ? group.getAcademicYear().getId() : null);
 
@@ -45,6 +46,7 @@ public class GroupMapper {
         Group group = new Group();
         group.setId(groupDto.getId());
         group.setName(groupDto.getName());
+        group.setType(groupDto.getType());
         group.setStudentsIds(groupDto.getStudentsIds());
 
         return group;
